@@ -54,15 +54,7 @@ const options = {
         { text: '担保大群', url: 'https://t.me/tianxiawudi777' },
       ],
     ],
-    keyboard: [
-      [
-        { text: '使用说明', switch_inline_query_current_chat: '使用说明' },
-        {
-          text: '查询实时U价格',
-          switch_inline_query_current_chat: '查询实时U价格',
-        },
-      ],
-    ],
+    keyboard: [['使用说明', '查询实时USDT价格']],
   }),
 };
 module.exports = async (request, response) => {
