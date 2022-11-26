@@ -24,9 +24,8 @@ const options = {
       handleSql(usersql, { chatId }),
       handleSql(accountsql, { chatId }),
     ]);
-    const [user, account] = result.map((x) => x.value[0]);
-    console.log('user:', user);
-    console.log('account:', account);
+    const [user, account = []] = result.map((x) => x.value[0]);
+
     return {
       user,
       account,
