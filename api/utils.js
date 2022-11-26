@@ -10,12 +10,12 @@ const insertJobs = (data) => {
     .reduce(
       (pre, [k, v]) => ({
         keys: [...(pre.keys || []), k],
-        values: [...(pre.values || []), v],
+        values: [...(pre.values || []), k === 'chatId' ? v : `'${v}'`],
       }),
       {}
     );
   keys = keys.join(',');
-  values = `(${values.map((x) => `'${x}'`).join(',')})`;
+  values = `(${values.join(',')})`;
   return `INSERT INTO users (${keys}) VALUES ${values};`;
 };
 
