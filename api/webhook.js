@@ -10,6 +10,7 @@ const {
   calcStart,
   clear,
   setRate,
+  checkUaddress,
 } = require('./utils');
 
 //获取当前时间
@@ -151,6 +152,23 @@ module.exports = async (request, response) => {
           });
         }
       }
+
+      //查询u账号余额
+      let filter = /[\u4E00-\u9FA5\uF900-\uFA2D]{1,}/;
+      if (!filter.test(text) && text.length === 34) {
+        const res = await checkUaddress(text);
+        if (!_.isEmpty(res)) {
+          const { trx, usdt } = res;
+          outMsg = `您查询的地址 : <code>${text}</code> 
+目前trx余额: <code>${trx}</code>
+目前usdt余额: <code>${usdt}</code>`;
+
+          await bot.sendMessage(id, outMsg, {
+            parse_mode: 'HTML',
+            ...options,
+          });
+        }
+      }
     }
   } catch (error) {
     console.error(error);
@@ -192,7 +210,7 @@ function editMsg(account, current) {
         onCount: 0,
       }
     );
-    msg = `当前时间: <b>${gettime(createTime).format('yyyy-MM-dd hh:mm:ss')}</b>
+    msg = `当前时间: <b>${gettime().format('yyyy-MM-dd hh:mm:ss')}</b>
 <code>已入账(${on.length}笔):</code>
 ${on.join('')}
 <code>已下发(${out.length}笔):</code>
