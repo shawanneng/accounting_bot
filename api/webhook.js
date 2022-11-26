@@ -52,9 +52,11 @@ const options = {
       [
         {
           text: '使用说明',
-          url: 'https://t.me/tianxiawudi777',
+          // url: 'https://t.me/tianxiawudi777',
+          text: '使用说明',
         },
         { text: '担保大群', url: 'https://t.me/tianxiawudi777' },
+        { text: '联系客服', url: 'https://t.me/tianxiawudi777' },
       ],
     ],
   }),
@@ -72,6 +74,20 @@ module.exports = async (request, response) => {
       let outMsg = '';
 
       const bot = new TelegramBot(telegramConfig.token);
+
+      if (text === '使用说明') {
+        outMsg = `<i>使用说明</i>\n
+<b>发送指令1 可查实时USDT价格</b>\n
+<b>发送指令+RMB如+100 使用记账加100</b>\n
+<b>发送指令-RMB如-100 使用记账减100</b>\n
+<b>发送指令下发U如下发100 使用记账减100u</b>\n
+<b>直接发送冷钱包U地址 可查询实时余额</b>\n`;
+        await bot.sendMessage(id, outMsg, {
+          parse_mode: 'HTML',
+          ...options,
+        });
+        return;
+      }
 
       if (text === '1') {
         let list = await getOk();
