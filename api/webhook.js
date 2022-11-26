@@ -81,13 +81,7 @@ module.exports = async (request, response) => {
       const [item = {}] = entities || [];
       let at = text?.slice(item?.length || 0)?.trim();
 
-      const isAt =
-        (!_.isEmpty(entities) &&
-          item?.type === 'mention' &&
-          at === '使用说明') ||
-        at === '查询实时U价格';
-
-      if (text === '使用说明' || isAt) {
+      if (text === '使用说明' || isAt || at === '使用说明') {
         outMsg = `<i>使用说明</i>\n
 <b>发送指令<pre>1</pre> 可查实时USDT价格</b>\n
 <b>发送指令+RMB如<pre>+100</pre> 使用记账加100</b>\n
@@ -104,6 +98,7 @@ module.exports = async (request, response) => {
 
       if (
         text === '查询实时U价格' ||
+        at === '查询实时U价格' ||
         text === '1' ||
         (text.length === 2 && new RegExp(/\w\d/).test(text)) ||
         isAt
