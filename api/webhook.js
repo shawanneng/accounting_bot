@@ -125,7 +125,10 @@ module.exports = async (request, response) => {
             await calcStart(current);
             outMsg = editMsg(account, current);
           }
-          await bot.sendMessage(id, outMsg, options);
+          await bot.sendMessage(id, outMsg, {
+            parse_mode: 'HTML',
+            ...options,
+          });
         }
 
         if (text === '清空账本') {
@@ -162,19 +165,21 @@ function editMsg(account, current) {
     const { out, on, outCount, onCount } = [...account, current].reduce(
       (x, y) => {
         const { arithmetic, calcMethod, currentRate, createTime } = y;
-        let curtime = gettime(createTime).format('MM-dd hh:mm:ss');
+        let curtime = gettime(createTime).format('hh:mm:ss');
         let u = Math.round(arithmetic / currentRate);
         if (calcMethod === '+') {
           x.on.push(
-            `${curtime}  ${arithmetic} / ${currentRate} = ${u} (USDT)\n`
+            `<code>${curtime}${arithmetic} / ${currentRate} = ${u} (USDT)</code>\n`
           );
           x.onCount += arithmetic - 0;
         } else if (calcMethod === '-') {
-          x.out.push(`${curtime} ${u}U  (实时汇率: ${currentRate}) \n`);
+          x.out.push(
+            `<code>${curtime} ${u}U (实时汇率: ${currentRate})</code> \n`
+          );
           x.outCount -= arithmetic - 0;
         } else {
           x.out.push(
-            `${curtime} 下发${arithmetic}U  (实时汇率: ${currentRate}) \n`
+            `<code>${curtime} 下发${arithmetic}U (实时汇率: ${currentRate})</code> \n`
           );
           x.outCount -= (arithmetic * currentRate).toFixed(2);
         }
@@ -187,22 +192,25 @@ function editMsg(account, current) {
         onCount: 0,
       }
     );
-    msg = `已入账(${on.length}笔):
-  ${on.join('')}
-  已下发(${out.length}笔):
-  ${out.join('')}
+    msg = `当前时间: <b>${gettime(createTime).format('yyyy-MM-dd hh:mm:ss')}</b>
+<code>已入账(${on.length}笔):</code>
+${on.join('')}
+<code>已下发(${out.length}笔):</code>
+${out.join('')}
   
-  总入款金额:${onCount}
-  当前汇率:${current.currentRate}
-  应下发: ${onCount}  |  ${(onCount / current.currentRate).toFixed(2)} (USDT)
-  已下发: ${Math.abs(outCount)}  |  ${(
+<code>总入款金额:${onCount}</code>
+<code>当前汇率:${current.currentRate}</code>
+<code>应下发: ${onCount}  |  ${(onCount / current.currentRate).toFixed(
+      2
+    )} (USDT)</code>
+<code>已下发: ${Math.abs(outCount)}  |  ${(
       Math.abs(outCount) / current.currentRate
-    ).toFixed(2)} (USDT)
-  未下发: ${onCount + outCount}  |  ${(
+    ).toFixed(2)} (USDT)</code>
+<code>未下发: ${onCount + outCount}  |  ${(
       (onCount + outCount) /
       current.currentRate
-    ).toFixed(2)} (USDT)
-  共计${on.length + out.length}笔`;
+    ).toFixed(2)} (USDT)</code>
+<code>共计${on.length + out.length}笔</code>`;
   }
 
   return msg;
