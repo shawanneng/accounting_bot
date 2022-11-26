@@ -6,6 +6,7 @@ const instance = axios.create({
   httpAgent: new http.Agent({ keepAlive: true }),
   httpsAgent: new https.Agent({ keepAlive: true }),
   withCredentials: true,
+  timeout: 5000,
 });
 // const headers = {
 //   'content-type': 'application/json',
@@ -28,16 +29,16 @@ instance.interceptors.request.use(
     const [Referer] = rep.exec(config.url);
     config.headers.Referer = Referer;
 
-    try {
-      const { data } = await axios({
-        url: 'https://cn.lwwangluo.store/cn',
-      });
-      console.log('data:', data);
-      const proxy = _.pick(data, ['host', 'port']);
-      if (!_.isEmpty(proxy)) {
-        config.proxy = proxy;
-      }
-    } catch (error) {}
+    // try {
+    //   const { data } = await axios({
+    //     url: 'https://cn.lwwangluo.store/cn',
+    //   });
+    //   console.log('data:', data);
+    //   const proxy = _.pick(data, ['host', 'port']);
+    //   if (!_.isEmpty(proxy)) {
+    //     config.proxy = proxy;
+    //   }
+    // } catch (error) {}
     return config;
   },
   (error) => ({})
