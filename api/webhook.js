@@ -187,7 +187,7 @@ function editMsg(account, current) {
         let curtime = gettime(createTime).format('hh:mm:ss');
         let u = (arithmetic / currentRate).toFixed(2);
         if (calcMethod === '+') {
-          x.on.push(`${curtime}  ${arithmetic} / ${currentRate}= ${u}(USDT)\n`);
+          x.on.push(`${curtime}  ${arithmetic} / ${currentRate}= ${u}U\n`);
           x.onCount += arithmetic - 0;
         } else if (calcMethod === '-') {
           x.out.push(`${curtime}  ${u}U(实时汇率: ${currentRate})`);
@@ -217,14 +217,14 @@ ${out.join('')}
 <code>当前汇率:${current.currentRate}</code>
 <code>应下发: ${onCount.toFixed(2)} | ${(onCount / current.currentRate).toFixed(
       2
-    )} (USDT)</code>
+    )}U</code>
 <code>已下发: ${Math.abs(outCount).toFixed(2)} | ${(
       Math.abs(outCount) / current.currentRate
-    ).toFixed(2)}(USDT)</code>
+    ).toFixed(2)}U</code>
 <code>未下发: ${(onCount + outCount).toFixed(2)} | ${(
       (onCount + outCount) /
       current.currentRate
-    ).toFixed(2)}(USDT)</code>
+    ).toFixed(2)}U</code>
 <code>共计${on.length + out.length}笔</code>`;
   }
 
