@@ -20,7 +20,7 @@ module.exports = async (request, response) => {
       const bot = new TelegramBot(telegramConfig.token);
 
       if (type === 'supergroup' && text === '开始' && !is_bot) {
-        const { code, userChannel } = await createUid({
+        const { code, channelTitle } = await createUid({
           chatId,
           userName,
           userChannel: id,
@@ -30,9 +30,9 @@ module.exports = async (request, response) => {
         });
         let outMsg = '';
         if (code === 200) {
-          outMsg = `<strong> ${first_name}</strong> <strong>您好,欢迎使用 算账机器人,你已成功注册!可以点击下方按钮查看机器人使用说明使用</strong> `;
+          outMsg = `<b> ${first_name}</b> <strong>您好,欢迎使用 算账机器人,你已成功注册!可以点击下方按钮查看机器人使用说明使用</strong> `;
         } else {
-          outMsg = ` <pre>${first_name}</pre><strong>:您已经在</strong><pre>${userChannel}</pre> <strong>群内注册过,请直接开始使用吧!</strong>`;
+          outMsg = ` <strong>${first_name}</strong>:您已经在<a>${channelTitle}</a> <strong>群内注册过,请直接开始使用吧!</strong>`;
         }
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
@@ -63,7 +63,7 @@ module.exports = async (request, response) => {
           ],
         }),
       };
-      bot.sendMessage(id, 'answer.', option);
+      bot.sendMessage(id, 'answer.', options);
 
       // await bot.sendMessage(id, content);
 
