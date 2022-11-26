@@ -5,10 +5,40 @@ const _ = require('lodash');
 const TelegramBot = require('node-telegram-bot-api');
 const { telegramConfig } = require('../server/configs');
 const { createUid, selectMyAccount, calcStart, clear } = require('./utils');
-const dayjs = require('dayjs');
-require('dayjs/locale/zh-cn');
-dayjs.extend(require('dayjs/plugin/relativeTime'));
-dayjs.locale('zh-cn');
+
+//获取当前时间
+Date.prototype.format = function (format) {
+  var args = {
+    'M+': this.getMonth() + 1,
+    'd+': this.getDate(),
+    'h+': this.getHours(),
+    'm+': this.getMinutes(),
+    's+': this.getSeconds(),
+    'q+': Math.floor((this.getMonth() + 3) / 3), //quarter
+    S: this.getMilliseconds(),
+  };
+  if (/(y+)/.test(format))
+    format = format.replace(
+      RegExp.$1,
+      (this.getFullYear() + '').substr(4 - RegExp.$1.length)
+    );
+  for (var i in args) {
+    var n = args[i];
+    if (new RegExp('(' + i + ')').test(format))
+      format = format.replace(
+        RegExp.$1,
+        RegExp.$1.length == 1 ? n : ('00' + n).substr(('' + n).length)
+      );
+  }
+  return format;
+};
+function gettime(time) {
+  return new Date(
+    new Date(time).getTime() +
+      (parseInt(new Date(time).getTimezoneOffset() / 60) + 8) * 3600 * 1000
+  );
+}
+console.log('a:', a);
 const options = {
   reply_markup: JSON.stringify({
     inline_keyboard: [
@@ -88,7 +118,7 @@ module.exports = async (request, response) => {
             const { out, on, outCount, onCount } = [...account, current].reduce(
               (x, y) => {
                 const { arithmetic, calcMethod, currentRate, createTime } = y;
-                let curtime = dayjs(createTime).format('MM月DD日 hh:mm:ss');
+                let curtime = gettime(createTime).format('yyyy-MM-dd hh:mm:ss');
                 let u = (arithmetic / currentRate).toFixed(2);
                 if (calcMethod === '+') {
                   x.on.push(
@@ -119,7 +149,6 @@ ${out.join('')}
 已下发: ${Math.abs(outCount)} | ${(
               Math.abs(outCount) / current.currentRate
             ).toFixed(2)} (USDT)
-
 未下发: ${onCount + outCount} | ${(
               (onCount + outCount) /
               current.currentRate
