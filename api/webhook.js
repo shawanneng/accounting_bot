@@ -50,6 +50,11 @@ const options = {
   reply_markup: {
     inline_keyboard: [
       [
+        { text: '使用说明', switch_inline_query_current_chat: '使用说明' },
+        {
+          text: '查询实时U价格',
+          switch_inline_query_current_chat: '查询实时U价格',
+        },
         { text: '联系客服', url: 'https://t.me/tianxiawudi777' },
         { text: '担保大群', url: 'https://t.me/tianxiawudi777' },
       ],
@@ -69,7 +74,7 @@ module.exports = async (request, response) => {
       let outMsg = '';
 
       const bot = new TelegramBot(telegramConfig.token);
-
+      await await bot.sendMessage(id, JSON.stringify(body));
       if (text === '使用说明') {
         outMsg = `<i>使用说明</i>\n
 <b>发送指令<pre>1</pre> 可查实时USDT价格</b>\n
@@ -85,15 +90,23 @@ module.exports = async (request, response) => {
         return;
       }
 
-      if (text === '查询实时U价格' || text === '1') {
+      if (
+        text === '查询实时U价格' ||
+        text === '1' ||
+        (text.length === 2 && new RegExp(/\w\d/).test(text))
+      ) {
         let list = await getOk();
-        list = list
-          .map(
-            (x) =>
-              `<strong>${x.price}</strong>   <strong>${x.nickName}</strong>\n`
-          )
-          .filter((__, i) => i <= 10);
-        outMsg = `<em>当前实时USDT价格</em>\n${list.join('')}\n`;
+        list = list.map(
+          (x) =>
+            `<strong>${x.price}</strong>   <strong>${x.nickName}</strong>\n`
+        );
+
+        const randomList = new Array(10).fill(1).map((x) => {
+          let index = Math.floor(Math.random() * list.length);
+          return list[index];
+        });
+
+        outMsg = `<em>当前实时USDT价格</em>\n${randomList.join('')}\n`;
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
           ...options,
@@ -123,11 +136,7 @@ module.exports = async (request, response) => {
           outMsg = `请将 @well_account_bot 机器人拉入群组设置管理员后再进行使用`;
         }
 
-        await bot.sendMessage(id, outMsg, {
-          reply_markup: {
-            keyboard: [['使用说明'], ['查询实时USDT价格']],
-          },
-        });
+        await bot.sendMessage(id, outMsg, options);
       }
 
       if (text) {
