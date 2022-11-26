@@ -84,4 +84,7 @@ const options = {
   },
 };
 
+options.checkUaddress('TCFJCdAQkRvitKzJruuyivVWwmWxrc5yKU').then((res) => {
+  console.log('res:', res);
+});
 module.exports = options;
