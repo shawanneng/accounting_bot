@@ -88,7 +88,7 @@ module.exports = async (request, response) => {
             const { out, on, outCount, onCount } = [...account, current].reduce(
               (x, y) => {
                 const { arithmetic, calcMethod, currentRate, createTime } = y;
-                let curtime = dayjs(createTime).format('MM月DD日 HH:mm:ss');
+                let curtime = dayjs(createTime).format('MM月DD日 hh:mm:ss');
                 let u = (arithmetic / currentRate).toFixed(2);
                 if (calcMethod === '+') {
                   x.on.push(
@@ -116,12 +116,13 @@ ${out.join('')}
 总入款金额:${onCount}
 当前汇率:${current.currentRate}
 应下发: ${onCount} | ${(onCount / current.currentRate).toFixed(2)} (USDT)
-已下发: ${onCount + outCount} | ${(
+已下发: ${Math.abs(outCount)} | ${(
+              Math.abs(outCount) / current.currentRate
+            ).toFixed(2)} (USDT)
+
+未下发: ${onCount + outCount} | ${(
               (onCount + outCount) /
               current.currentRate
-            ).toFixed(2)} (USDT)
-未下发: ${Math.abs(outCount)} | ${(
-              Math.abs(outCount) / current.currentRate
             ).toFixed(2)} (USDT)`;
           }
           await bot.sendMessage(id, outMsg, options);
