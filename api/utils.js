@@ -92,12 +92,7 @@ async function getOk() {
       url: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=cny&baseCurrency=usdt&side=buy&paymentMethod=all&userType=all&showTrade=false&receivingAds=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false`,
       headers: {
         accept: 'application/json',
-        'accept-encoding': ' gzip, deflate, br',
-        'accept-language': ' en-US,en;q=0.9',
-        'sec-fetch-dest': 'document',
-        'sec-fetch-mode': 'navigate',
-        'sec-fetch-site': 'cross-site',
-        'upgrade-insecure-requests': '1',
+        'Content-Type': 'application/json;charset:utf-8',
         'user-agent':
           'Mozilla/5.0 (Linux; Android 8.1.0; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36 PTST/221108.151815',
       },
@@ -132,7 +127,7 @@ async function getOk() {
 
     const res = await cloudscraper(options);
     const $ = cheerio.load(res);
-    let html = $('pre').html();
+    let html = $('html').html();
     console.log('html:', html);
     const curOptions =
       res?.data?.buy?.map(({ nickName, price }) => ({
