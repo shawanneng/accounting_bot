@@ -66,7 +66,6 @@ const options = {
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
         },
       });
-      console.log('tronscanapidata:', data);
       body = data;
     } catch (error) {}
     let res =
@@ -83,6 +82,8 @@ const options = {
       }, {}) || {};
     return res;
   },
+  /** 获取当前汇率 */
+  getOk,
 };
 
 async function getOk() {
@@ -131,12 +132,16 @@ async function getOk() {
     };
 
     const res = await cloudscraper(options);
-    console.log(
-      'res:',
-      res?.data?.data?.buy?.map(({ nickName, price }) => ({ nickName, price }))
-    );
+    const curOptions =
+      res?.data?.buy?.map(({ nickName, price }) => ({
+        nickName,
+        price,
+      })) || [];
+    console.log('curOptions:', curOptions);
+    return curOptions;
   } catch (error) {
     console.log('cloudscrapererror:', error);
+    return [];
   }
 }
 

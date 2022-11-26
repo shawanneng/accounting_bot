@@ -11,6 +11,7 @@ const {
   clear,
   setRate,
   checkUaddress,
+  getOk,
 } = require('./utils');
 
 //获取当前时间
@@ -71,6 +72,19 @@ module.exports = async (request, response) => {
       let outMsg = '';
 
       const bot = new TelegramBot(telegramConfig.token);
+
+      if (+text === 1) {
+        let list = await getOk();
+        list = list.map(
+          (x) => `<pre><b>${x.nickName}</b><code>${x.price}</code></pre>`
+        );
+        outMsg = `<i>当前USDT费率</i>${list.join('\n')}`;
+        await bot.sendMessage(id, outMsg, {
+          parse_mode: 'HTML',
+          ...options,
+        });
+        return;
+      }
 
       if (text === '开始') {
         if (type === 'supergroup' && !is_bot) {
