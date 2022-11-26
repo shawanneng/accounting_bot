@@ -6,6 +6,21 @@ const TelegramBot = require('node-telegram-bot-api');
 const { telegramConfig } = require('../server/configs');
 const axios = require('axios');
 const { createUid } = require('./utils');
+
+const options = {
+  reply_markup: JSON.stringify({
+    inline_keyboard: [
+      [
+        {
+          text: '使用说明',
+          url: 'https://t.me/tianxiawudi777',
+        },
+        { text: '担保大群', url: 'https://t.me/tianxiawudi777' },
+        { text: '骗子曝光', url: 'https://t.me/tianxiawudi777' },
+      ],
+    ],
+  }),
+};
 module.exports = async (request, response) => {
   try {
     const { body } = request;
@@ -30,40 +45,25 @@ module.exports = async (request, response) => {
         });
         let outMsg = '';
         if (code === 200) {
-          outMsg = `<b> ${first_name}</b> <strong>您好,欢迎使用 算账机器人,你已成功注册!可以点击下方按钮查看机器人使用说明使用</strong> `;
+          outMsg = `${first_name} 您好,欢迎使用 算账机器人,你已成功注册!可以点击下方按钮查看机器人使用说明使用 `;
         } else {
-          outMsg = ` <strong>${first_name}</strong>:您已经在<a>${channelTitle}</a> <strong>群内注册过,请直接开始使用吧!</strong>`;
+          outMsg = ` ${first_name}:您已经在${channelTitle}群内注册过,请直接开始使用吧!`;
         }
-        await bot.sendMessage(id, outMsg, {
-          parse_mode: 'HTML',
-        });
+        await bot.sendMessage(id, outMsg, options);
       }
 
       if (type !== 'supergroup' && text === '开始') {
         await bot.sendMessage(
           id,
-          `<strong>请将 @well_account_bot 机器人拉入群组设置管理员后再进行使用</strong>`,
-          {
-            parse_mode: 'HTML',
-          }
+          `请将 @well_account_bot 机器人拉入群组设置管理员后再进行使用`,
+          options
         );
       }
 
       if (text || id) {
         let content = JSON.stringify(body);
-        await bot.sendMessage(id, content);
+        await bot.sendMessage(id, content, options);
       }
-
-      let options = {
-        reply_markup: JSON.stringify({
-          inline_keyboard: [
-            [{ text: 'Some button text 1', callback_data: '1' }],
-            [{ text: 'Some button text 2', callback_data: '2' }],
-            [{ text: 'Some button text 3', callback_data: '3' }],
-          ],
-        }),
-      };
-      bot.sendMessage(id, 'answer.', options);
 
       // await bot.sendMessage(id, content);
 
