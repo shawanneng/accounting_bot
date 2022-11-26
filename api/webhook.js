@@ -47,15 +47,14 @@ function gettime(time) {
   );
 }
 const options = {
-  reply_markup: JSON.stringify({
+  reply_markup: {
     inline_keyboard: [
       [
         { text: '联系客服', url: 'https://t.me/tianxiawudi777' },
         { text: '担保大群', url: 'https://t.me/tianxiawudi777' },
       ],
     ],
-    keyboard: [['使用说明', '查询实时USDT价格']],
-  }),
+  },
 };
 module.exports = async (request, response) => {
   try {
@@ -124,7 +123,11 @@ module.exports = async (request, response) => {
           outMsg = `请将 @well_account_bot 机器人拉入群组设置管理员后再进行使用`;
         }
 
-        await bot.sendMessage(id, outMsg, options);
+        await bot.sendMessage(id, outMsg, {
+          reply_markup: {
+            keyboard: [['使用说明', '查询实时USDT价格']],
+          },
+        });
       }
 
       if (text) {
