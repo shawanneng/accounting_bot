@@ -50,11 +50,14 @@ const options = {
   reply_markup: JSON.stringify({
     inline_keyboard: [
       [
+        { text: '使用说明', switch_inline_query_current_chat: '使用说明' },
+        { text: '查询实时U价格', switch_inline_query_current_chat: '1' },
+      ],
+      [
         { text: '担保大群', url: 'https://t.me/tianxiawudi777' },
         { text: '联系客服', url: 'https://t.me/tianxiawudi777' },
       ],
     ],
-    keyboard: [['使用说明']],
   }),
 };
 module.exports = async (request, response) => {
