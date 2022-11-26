@@ -79,11 +79,9 @@ module.exports = async (request, response) => {
 
             if (text.includes('+')) {
               current.calcMethod = '+';
-              current.text = '已入账';
             }
             if (text.includes('-')) {
               current.calcMethod = '-';
-              current.text = '已下发';
             }
 
             await calcStart(current);
@@ -109,7 +107,7 @@ module.exports = async (request, response) => {
                 onCount: 0,
               }
             );
-            outMsg = `已入款(${on.length}笔):
+            outMsg = `已入账(${on.length}笔):
 ${on.join('')}
 已下发(${out.length}笔):
 ${out.join('')}
