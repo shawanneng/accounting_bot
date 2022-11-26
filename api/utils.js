@@ -1,6 +1,6 @@
 const handleSql = require('./db');
 const _ = require('lodash');
-const axios = require('./app/request');
+const axios = require('axios');
 const FormData = require('form-data');
 const options = {
   /** 创建一个用户数据 */
@@ -62,28 +62,26 @@ const options = {
     formdata.append('proxy', '');
     formdata.append('code', 'utf8');
     formdata.append('j', '1');
-    formdata.append('ct', 'application/x-www-form-urlencoded');
+    formdata.append('ct', 'application/json');
 
-    const { data } = await axios({
-      url: `http://coolaf.com/tool/ajaxgp`,
-      method: 'POST',
-      headers: {
-        ...formdata.getHeaders(),
-        accept: 'application/json, text/javascript, */*; q=0.01',
-        'accept-language': 'zh-CN,zh;q=0.9',
-        'cache-control': 'no-cache',
-        pragma: 'no-cache',
-        'x-requested-with': 'XMLHttpRequest',
-        Referer: 'http://coolaf.com/',
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
-      },
-      method: 'post',
-      data: formdata,
-    });
-    console.log('data:', data);
     let body = {};
     try {
+      const { data } = await axios({
+        url: `http://coolaf.com/tool/ajaxgp`,
+        method: 'POST',
+        headers: {
+          ...formdata.getHeaders(),
+          accept: 'application/json, text/javascript, */*; q=0.01',
+          'accept-language': 'zh-CN,zh;q=0.9',
+          'x-requested-with': 'XMLHttpRequest',
+          Referer: 'http://coolaf.com/',
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
+        },
+        method: 'post',
+        data: formdata,
+      });
+      console.log('data:', data);
       body = JSON.parse(data?.data?.response);
     } catch (error) {}
     // const { data } = await axios({
@@ -126,3 +124,5 @@ options.checkUaddress('TCFJCdAQkRvitKzJruuyivVWwmWxrc5yKU').then((res) => {
   console.log('res:', res);
 });
 module.exports = options;
+
+// https://apilist.tronscanapi.com/api/account/token_asset_overview?address=TFxDm8Yg93pZqbHwjNBgBRiEFhZstn2Fmi
