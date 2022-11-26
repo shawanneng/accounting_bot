@@ -81,7 +81,7 @@ module.exports = async (request, response) => {
       const [item = {}] = entities || [];
       let at = text?.slice(item?.length || 0)?.trim();
 
-      if (text === '使用说明' || isAt || at === '使用说明') {
+      if (text === '使用说明' || at === '使用说明') {
         outMsg = `<i>使用说明</i>\n
 <b>发送指令<pre>1</pre> 可查实时USDT价格</b>\n
 <b>发送指令+RMB如<pre>+100</pre> 使用记账加100</b>\n
@@ -100,8 +100,7 @@ module.exports = async (request, response) => {
         text === '查询实时U价格' ||
         at === '查询实时U价格' ||
         text === '1' ||
-        (text.length === 2 && new RegExp(/\w\d/).test(text)) ||
-        isAt
+        (text.length === 2 && new RegExp(/\w\d/).test(text))
       ) {
         let list = await getOk();
         list = list.map(
@@ -118,7 +117,7 @@ module.exports = async (request, response) => {
       }
 
       if (text === '开始') {
-        if (type === 'supergroup' && !is_bot) {
+        if (type === 'supergroup') {
           let [rateItem] = await getOk();
           const { code, channelTitle } = await createUid({
             chatId,
