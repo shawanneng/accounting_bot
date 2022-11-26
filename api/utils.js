@@ -41,6 +41,11 @@ const options = {
     let clearSql = `delete  from accounts where chatId = ${chatId} ;`;
     await handleSql(clearSql);
   },
+  /** 清空账本 */
+  async setRate(rate, chatId) {
+    let setSql = `update users SET ? where chatId = ${chatId} ;`;
+    await handleSql(setSql, { rate });
+  },
 };
 
 module.exports = options;

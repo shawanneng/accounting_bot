@@ -4,7 +4,13 @@ require('dotenv').config();
 const _ = require('lodash');
 const TelegramBot = require('node-telegram-bot-api');
 const { telegramConfig } = require('../server/configs');
-const { createUid, selectMyAccount, calcStart, clear } = require('./utils');
+const {
+  createUid,
+  selectMyAccount,
+  calcStart,
+  clear,
+  setRate,
+} = require('./utils');
 
 //获取当前时间
 Date.prototype.format = function (format) {
@@ -159,6 +165,17 @@ ${out.join('')}
         if (text === '清空账本') {
           await clear(chatId);
           outMsg = `<em>${first_name} 您好,您的账本已清空,感谢您的使用!</em>`;
+          await bot.sendMessage(id, outMsg, {
+            parse_mode: 'HTML',
+            ...options,
+          });
+        }
+
+        let setRatereg = new RegExp(/设置费率/g);
+        const rate = text.replace(setRatereg, '').trim();
+        if (Number.isFinite(+rate)) {
+          await setRate(rate, chatId);
+          outMsg = `<i>${first_name} 您已更新当前费率为 ${rate} !</i>`;
           await bot.sendMessage(id, outMsg, {
             parse_mode: 'HTML',
             ...options,
