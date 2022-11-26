@@ -173,7 +173,7 @@ ${out.join('')}
 
         let setRatereg = new RegExp(/设置费率/);
         const rate = text.replace(setRatereg, '').trim();
-        if (Number.isFinite(+rate)) {
+        if (Number.isFinite(+rate) && setRatereg.test(text)) {
           await setRate(rate, chatId);
           outMsg = `<i>${first_name} 您已更新当前费率为 ${rate} !</i>`;
           await bot.sendMessage(id, outMsg, {
