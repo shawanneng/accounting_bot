@@ -7,7 +7,7 @@ const options = {
     const [result] = await handleSql(usersql);
     if (!_.isEmpty(result)) {
       return {
-        result,
+        ...result,
         code: 201,
       };
     }

@@ -30,9 +30,9 @@ module.exports = async (request, response) => {
         });
         let outMsg = '';
         if (code === 200) {
-          outMsg = `<b> ${first_name}</b> 您好,欢迎使用 算账机器人,你已成功注册!可以点击下方按钮查看机器人使用说明使用`;
+          outMsg = `<strong> ${first_name}</strong> <strong>您好,欢迎使用 算账机器人,你已成功注册!可以点击下方按钮查看机器人使用说明使用</strong> `;
         } else {
-          outMsg = `<b> ${first_name} : 您已经在${userChannel} 群内注册过,请直接开始使用吧!</b>`;
+          outMsg = ` <pre>${first_name}</pre><strong>:您已经在</strong><pre>${userChannel}</pre> <strong>群内注册过,请直接开始使用吧!</strong>`;
         }
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
@@ -42,7 +42,7 @@ module.exports = async (request, response) => {
       if (type !== 'supergroup' && text === '开始') {
         await bot.sendMessage(
           id,
-          `<b>请将 @well_account_bot 机器人拉入群组设置管理员后进行使用</b>`,
+          `<strong>请将 @well_account_bot 机器人拉入群组设置管理员后再进行使用</strong>`,
           {
             parse_mode: 'HTML',
           }
@@ -51,7 +51,6 @@ module.exports = async (request, response) => {
 
       if (text || id) {
         let content = JSON.stringify(body);
-        await bot.sendMessage(id, text);
         await bot.sendMessage(id, content);
       }
 
