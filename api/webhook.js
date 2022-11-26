@@ -71,7 +71,8 @@ module.exports = async (request, response) => {
       const {
         chat: { type, id, title },
         text,
-        from: { username: userName, first_name, is_bot, id: chatId, entities },
+        from: { username: userName, first_name, is_bot, id: chatId },
+        entities,
       } = body.message;
       let outMsg = '';
 
@@ -80,6 +81,7 @@ module.exports = async (request, response) => {
       const [item = {}] = entities || [];
       let at = text?.slice(item?.length || 0)?.trim();
       await bot.sendMessage(id, JSON.stringify(item));
+      await bot.sendMessage(id, JSON.stringify(at));
 
       const isAt =
         (!_.isEmpty(entities) &&
