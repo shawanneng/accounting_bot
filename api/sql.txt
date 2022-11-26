@@ -1,0 +1,20 @@
+CREATE TABLE `accounts` (
+	`chatId` int NOT NULL,
+	`arithmetic` varchar(255),
+	`arithmeticu` varchar(255),
+	`createTime` bigint,
+	`channel` varchar(255)
+) ENGINE InnoDB,
+  CHARSET utf8mb4,
+  COLLATE utf8mb4_0900_ai_ci;
+
+  CREATE TABLE `users` (
+	`id` int NOT NULL AUTO_INCREMENT,
+	`chatId` int,
+	`rate` varchar(255),
+	`userName` varchar(255),
+	`userChannel` varchar(255),
+	PRIMARY KEY (`id`)
+) ENGINE InnoDB,
+  CHARSET utf8mb4,
+  COLLATE utf8mb4_0900_ai_ci;
