@@ -58,13 +58,11 @@ module.exports = async (request, response) => {
         }
 
         await bot.sendMessage(id, outMsg, options);
-        const res = await getBigUsdt();
-        await bot.sendMessage(id, JSON.stringify(res), options);
       }
 
       if (text) {
         let reg = new RegExp(/(\+|\-|)/g);
-        const arithmetic = str.replace(reg, '').trim();
+        const arithmetic = text.replace(reg, '').trim();
         if (Number.isFinite(+arithmetic)) {
           const { user, account } = await selectMyAccount(chatId);
           if (_.isEmpty(user)) {
