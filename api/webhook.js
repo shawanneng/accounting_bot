@@ -186,18 +186,14 @@ function editMsg(account, current) {
         let curtime = gettime(createTime).format('hh:mm:ss');
         let u = (arithmetic / currentRate).toFixed(2);
         if (calcMethod === '+') {
-          x.on.push(
-            `<code>${curtime} ${arithmetic} / ${currentRate}=${u}(USDT)</code>\n`
-          );
+          x.on.push(`${curtime} ${arithmetic} / ${currentRate}= ${u}(USDT)\n`);
           x.onCount += arithmetic - 0;
         } else if (calcMethod === '-') {
-          x.out.push(
-            `<code> ${curtime} ${u}U (实时汇率: ${currentRate})</code> \n`
-          );
+          x.out.push(`${curtime} ${u}U(实时汇率: ${currentRate})`);
           x.outCount -= arithmetic - 0;
         } else {
           x.out.push(
-            `<code> ${curtime} 下发${arithmetic}U (实时汇率: ${currentRate})</code> \n`
+            `${curtime} 下发${arithmetic}U(实时汇率: ${currentRate}) \n`
           );
           x.outCount -= (arithmetic * currentRate).toFixed(2);
         }
@@ -218,16 +214,16 @@ ${out.join('')}
   
 <code>总入款金额:${onCount}</code>
 <code>当前汇率:${current.currentRate}</code>
-<code>应下发: ${onCount}|${(onCount / current.currentRate).toFixed(
+<code>应下发: ${onCount} | ${(onCount / current.currentRate).toFixed(
       2
     )} (USDT)</code>
-<code>已下发: ${Math.abs(outCount).toFixed(2)}|${(
+<code>已下发: ${Math.abs(outCount).toFixed(2)} | ${(
       Math.abs(outCount) / current.currentRate
-    ).toFixed(2)} (USDT)</code>
-<code>未下发: ${(onCount + outCount).toFixed(2)}|${(
+    ).toFixed(2)}(USDT)</code>
+<code>未下发: ${(onCount + outCount).toFixed(2)} | ${(
       (onCount + outCount) /
       current.currentRate
-    ).toFixed(2)} (USDT)</code>
+    ).toFixed(2)}(USDT)</code>
 <code>共计${on.length + out.length}笔</code>`;
   }
 
