@@ -4,29 +4,21 @@ const axios = require('axios');
 let cloudscraper = require('cloudscraper');
 const cheerio = require('cheerio');
 
-const insertJobs = (list) => {
-  const item = list.reduce((x, y) => {
-    let { keys, values } = Object.entries(y)
-      .sort()
-      .reduce(
-        (pre, [k, v]) => ({
-          keys: [...(pre.keys || []), k],
-          values: [...(pre.values || []), v],
-        }),
-        {}
-      );
-    x.keys = keys.join(',');
-    values = `(${values.map((x) => `'${x}'`).join(',')})`;
-    if (x.values) {
-      x.values.push(values);
-    } else {
-      x.values = [values];
-    }
-
-    return x;
-  }, {});
-  return `INSERT INTO users (${item.keys}) VALUES ${item.values.join(',')};`;
+const insertJobs = (data) => {
+  let { keys, values } = Object.entries(data)
+    .sort()
+    .reduce(
+      (pre, [k, v]) => ({
+        keys: [...(pre.keys || []), k],
+        values: [...(pre.values || []), v],
+      }),
+      {}
+    );
+  keys = keys.join(',');
+  values = `(${values.map((x) => `'${x}'`).join(',')})`;
+  return `INSERT INTO users (${keys}) VALUES ${values};`;
 };
+
 const options = {
   /** 创建一个用户数据 */
   async createUid(data) {
