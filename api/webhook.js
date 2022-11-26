@@ -75,10 +75,11 @@ module.exports = async (request, response) => {
 
       if (+text === 1) {
         let list = await getOk();
-        list = list.map(
-          (x) => `<pre><b>${x.nickName}</b><code>${x.price}</code></pre>`
-        );
-        outMsg = `<i>当前USDT费率</i>${list.join('\n')}`;
+        // list = list.map(
+        //   (x) => `<pre><b>${x.nickName}</b><code>${x.price}</code></pre>`
+        // );
+        // outMsg = `<i>当前USDT费率</i>${list.join('\n')}`;
+        outMsg = `<i>当前USDT费率</i>${JSON.stringify(list)}`;
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
           ...options,

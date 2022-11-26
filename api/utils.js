@@ -132,7 +132,8 @@ async function getOk() {
     };
 
     const res = await cloudscraper(options);
-    console.log('  res:', res);
+
+    return res;
     const curOptions =
       res?.data?.buy?.map(({ nickName, price }) => ({
         nickName,
