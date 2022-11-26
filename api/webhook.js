@@ -77,10 +77,11 @@ module.exports = async (request, response) => {
         let list = await getOk();
         list = list
           .map(
-            (x) => `<strong>${x.nickName}</strong><strong>${x.price}</strong>\n`
+            (x) =>
+              `<strong>${x.price}</strong>   <strong>${x.nickName}</strong>\n`
           )
           .filter((__, i) => i <= 10);
-        outMsg = `<i>当前USDT费率</i>\n ${list.join('')}`;
+        outMsg = `<em>当前实时USDT价格</em>\n${list.join('')}`;
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
           ...options,

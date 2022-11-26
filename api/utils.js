@@ -119,7 +119,6 @@ async function getOk() {
         nickName,
         price,
       })) || [];
-    console.log('curOptions:', curOptions);
     return curOptions;
   } catch (error) {
     console.log('cloudscrapererror:', error);
