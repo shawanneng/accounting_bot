@@ -1,6 +1,6 @@
 const handleSql = require('./db');
 const _ = require('lodash');
-const axios = require('./app/request');
+const axios = require('axios');
 
 const options = {
   /** 创建一个用户数据 */

@@ -184,7 +184,7 @@ function editMsg(account, current) {
       (x, y) => {
         const { arithmetic, calcMethod, currentRate, createTime } = y;
         let curtime = gettime(createTime).format('hh:mm:ss');
-        let u = Math.round(arithmetic / currentRate);
+        let u = (arithmetic / currentRate).toFixed(2);
         if (calcMethod === '+') {
           x.on.push(
             `<code>${curtime} ${arithmetic}/${currentRate}=${u}(USDT)</code>\n`
@@ -221,10 +221,10 @@ ${out.join('')}
 <code>应下发: ${onCount}  |  ${(onCount / current.currentRate).toFixed(
       2
     )} (USDT)</code>
-<code>已下发: ${Math.abs(outCount)}  |  ${(
+<code>已下发: ${Math.abs(outCount).toFixed(2)}  |  ${(
       Math.abs(outCount) / current.currentRate
     ).toFixed(2)} (USDT)</code>
-<code>未下发: ${onCount + outCount}  |  ${(
+<code>未下发: ${(onCount + outCount).toFixed(2)}  |  ${(
       (onCount + outCount) /
       current.currentRate
     ).toFixed(2)} (USDT)</code>
