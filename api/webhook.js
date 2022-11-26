@@ -73,10 +73,10 @@ module.exports = async (request, response) => {
 
       if (text === '使用说明') {
         outMsg = `<i>使用说明</i>\n
-<b>发送指令1 可查实时USDT价格</b>\n
-<b>发送指令+RMB如+100 使用记账加100</b>\n
-<b>发送指令-RMB如-100 使用记账减100</b>\n
-<b>发送指令下发U如下发100 使用记账减100u</b>\n
+<b>发送指令<pre>1</pre> 可查实时USDT价格</b>\n
+<b>发送指令+RMB如<pre>+100</pre> 使用记账加100</b>\n
+<b>发送指令-RMB如<pre>-100</pre> 使用记账减100</b>\n
+<b>发送指令下发U如<pre>下发100</pre> 使用记账减100u</b>\n
 <b>直接发送冷钱包U地址 可查询实时余额</b>\n`;
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
