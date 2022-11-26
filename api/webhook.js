@@ -84,6 +84,7 @@ module.exports = async (request, response) => {
       if (text === '使用说明' || at === '使用说明') {
         outMsg = `<i>使用说明</i>\n
 <b>发送指令<pre>1</pre> 可查实时USDT价格</b>\n
+<b>发送指令<pre>清空账本</pre> 可清空记账本重新开始</b>\n
 <b>发送指令+RMB如<pre>+100</pre> 使用记账加100</b>\n
 <b>发送指令设置费率+费率如<pre>设置费率7.25</pre>设置当前记账费率</b>\n
 <b>发送指令-RMB如<pre>-100</pre> 使用记账减100</b>\n
