@@ -5,20 +5,49 @@ const _ = require('lodash');
 const TelegramBot = require('node-telegram-bot-api');
 const { telegramConfig } = require('../server/configs');
 const axios = require('axios');
-
+const { createUid } = require('./utils');
 module.exports = async (request, response) => {
   try {
     const { body } = request;
 
     if (body.message) {
       const {
-        chat: { id },
+        chat: { type, id, title },
         text,
+        from: { username: userName, first_name, is_bot, id: chatId },
       } = body.message;
+
       const bot = new TelegramBot(telegramConfig.token);
 
-      // if (text === '开始') {
-      // }
+      if (type === 'supergroup' && text === '开始' && !is_bot) {
+        const { code, userChannel } = await createUid({
+          chatId,
+          userName,
+          userChannel: id,
+          userTitle: first_name,
+          channelTitle: title,
+          rate: 7.25,
+        });
+        let outMsg = '';
+        if (code === 200) {
+          outMsg = `<b> ${first_name}</b> 您好,欢迎使用 算账机器人,你已成功注册!可以点击下方按钮查看机器人使用说明使用`;
+        } else {
+          outMsg = `<b> ${first_name} : 您已经在${userChannel} 群内注册过,请直接开始使用吧!</b>`;
+        }
+        await bot.sendMessage(id, outMsg, {
+          parse_mode: 'HTML',
+        });
+      }
+
+      if (type !== 'supergroup' && text === '开始') {
+        await bot.sendMessage(
+          id,
+          `<b>请将 @well_account_bot 机器人拉入群组设置管理员后进行使用</b>`,
+          {
+            parse_mode: 'HTML',
+          }
+        );
+      }
 
       if (text || id) {
         let content = JSON.stringify(body);

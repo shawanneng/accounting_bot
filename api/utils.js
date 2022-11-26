@@ -1,11 +1,19 @@
 const handleSql = require('./db');
-
+const _ = require('lodash');
 const options = {
   /** 创建一个用户数据 */
   async createUid(data) {
-    // { chatId, userName, userChannel,chatId,rate }
+    let usersql = `select * from  users where chatId = ${data.chatId} ;`;
+    const [result] = await handleSql(usersql);
+    if (!_.isEmpty(result)) {
+      return {
+        result,
+        code: 201,
+      };
+    }
     let createSql = `insert into users set ? ;`;
     await handleSql(createSql, data);
+    return { code: 200 };
   },
   /** 查询chatId有关的账单和汇率 */
   async selectMyAccount(chatId) {
