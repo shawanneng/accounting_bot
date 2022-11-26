@@ -22,5 +22,5 @@ CREATE TABLE `users` (
   COLLATE utf8mb4_0900_ai_ci;
 
 
-  https://api.telegram.org/bot5833568977:AAGM9gqIL37iwmWJWtr4AAq26pGHW1bmSg8/setWebhook?url=https://accounting-bot.vercel.app
+  https://api.telegram.org/bot5764274397:AAEdpssiBQc2u0T_cSRIcQqh5lwax7HHGoU/setWebhook?url=https://accounting-bot.vercel.app
 /api/webhook

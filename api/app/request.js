@@ -8,20 +8,6 @@ const instance = axios.create({
   withCredentials: true,
   timeout: 5000,
 });
-// const headers = {
-//   'content-type': 'application/json',
-//   'accept-language': 'zh-CN,zh;q=0.9',
-//   'sec-fetch-dest': 'empty',
-//   'sec-fetch-mode': 'cors',
-//   'sec-fetch-site': 'cross-site',
-//   'Referrer-Policy': 'strict-origin-when-cross-origin',
-//   'user-agent':
-//     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
-// };
-
-// Object.entries(headers).forEach(([key, value]) => {
-//   instance.defaults.headers[key] = value;
-// });
 
 instance.interceptors.request.use(
   async (config) => {
@@ -29,16 +15,6 @@ instance.interceptors.request.use(
     const [Referer] = rep.exec(config.url);
     config.headers.Referer = Referer;
 
-    // try {
-    //   const { data } = await axios({
-    //     url: 'https://cn.lwwangluo.store/cn',
-    //   });
-    //   console.log('data:', data);
-    //   const proxy = _.pick(data, ['host', 'port']);
-    //   if (!_.isEmpty(proxy)) {
-    //     config.proxy = proxy;
-    //   }
-    // } catch (error) {}
     return config;
   },
   (error) => ({})
