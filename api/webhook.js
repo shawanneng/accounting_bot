@@ -50,12 +50,17 @@ const options = {
   reply_markup: JSON.stringify({
     inline_keyboard: [
       [
-        { text: '使用说明', switch_inline_query: '使用说明' },
-        { text: '查询实时U价格', switch_inline_query: '1' },
-      ],
-      [
-        { text: '担保大群', url: 'https://t.me/tianxiawudi777' },
         { text: '联系客服', url: 'https://t.me/tianxiawudi777' },
+        { text: '担保大群', url: 'https://t.me/tianxiawudi777' },
+      ],
+    ],
+    keyboard: [
+      [
+        { text: '使用说明', switch_inline_query_current_chat: '使用说明' },
+        {
+          text: '查询实时U价格',
+          switch_inline_query_current_chat: '查询实时U价格',
+        },
       ],
     ],
   }),
@@ -88,7 +93,7 @@ module.exports = async (request, response) => {
         return;
       }
 
-      if (text === '1') {
+      if (text === '查询实时U价格' || text === '1') {
         let list = await getOk();
         list = list
           .map(
