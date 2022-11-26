@@ -88,21 +88,6 @@ const options = {
 
 async function getOk() {
   try {
-    const res = await axios({
-      url: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=cny&baseCurrency=usdt&side=buy&paymentMethod=all&userType=all&showTrade=false&receivingAds=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false`,
-      headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json;charset:utf-8',
-        'user-agent':
-          'Mozilla/5.0 (Linux; Android 8.1.0; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36 PTST/221108.151815',
-      },
-    });
-    console.log('axios res.data:', res.data);
-  } catch (error) {
-    console.log('axios error:', error);
-  }
-
-  try {
     let options = {
       uri: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=cny&baseCurrency=usdt&side=buy&paymentMethod=all&userType=all&showTrade=false&receivingAds=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false`,
       headers: {
@@ -127,8 +112,10 @@ async function getOk() {
 
     const res = await cloudscraper(options);
     const $ = cheerio.load(res);
-    let html = $('html').html();
-    console.log('html:', html);
+    let html = $('body').html();
+    let data = {};
+    eval(`data = ${html}`);
+    console.log('data:', data);
     const curOptions =
       res?.data?.buy?.map(({ nickName, price }) => ({
         nickName,
