@@ -125,7 +125,7 @@ module.exports = async (request, response) => {
 
         await bot.sendMessage(id, outMsg, {
           reply_markup: {
-            keyboard: [['使用说明', '查询实时USDT价格']],
+            keyboard: [['使用说明'], ['查询实时USDT价格']],
           },
         });
       }
