@@ -18,3 +18,6 @@ CREATE TABLE `accounts` (
 ) ENGINE InnoDB,
   CHARSET utf8mb4,
   COLLATE utf8mb4_0900_ai_ci;
+
+
+  https://api.telegram.org/bot5833568977:AAGM9gqIL37iwmWJWtr4AAq26pGHW1bmSg8/setWebhook?url=http://accounts-robot.vercel.app/api/webhook
