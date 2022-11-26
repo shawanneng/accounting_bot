@@ -4,7 +4,7 @@ require('dotenv').config();
 const _ = require('lodash');
 const TelegramBot = require('node-telegram-bot-api');
 const { telegramConfig } = require('../server/configs');
-const { createUid, selectMyAccount, calcStart } = require('./utils');
+const { createUid, selectMyAccount, calcStart, clear } = require('./utils');
 const dayjs = require('dayjs');
 require('dayjs/locale/zh-cn');
 dayjs.extend(require('dayjs/plugin/relativeTime'));
@@ -72,7 +72,7 @@ module.exports = async (request, response) => {
             let current = {
               arithmetic: arithmetic,
               currentRate: rate,
-              createTime: dayjs().valueOf(),
+              createTime: Date.now(),
               channel: title,
               chatId,
             };
@@ -88,11 +88,11 @@ module.exports = async (request, response) => {
             const { out, on, outCount, onCount } = [...account, current].reduce(
               (x, y) => {
                 const { arithmetic, calcMethod, currentRate, createTime } = y;
-                let curtime = dayjs(createTime).format('YYYY-MM-DD HH:mm:ss');
+                let curtime = dayjs(createTime).format('MM月DD日 HH:mm:ss');
                 let u = (arithmetic / currentRate).toFixed(2);
                 if (calcMethod === '+') {
                   x.on.push(
-                    `${curtime}  ${arithmetic} / ${currentRate} = ${u} \n`
+                    `${curtime}  ${arithmetic} / ${currentRate} = ${u} (USDT)\n`
                   );
                   x.onCount += arithmetic - 0;
                 } else {
@@ -124,7 +124,17 @@ ${out.join('')}
           }
           await bot.sendMessage(id, outMsg, options);
         }
+
+        if (text === '清空账本') {
+          await clear(chatId);
+          outMsg = `<b>${first_name} 您好,您的账本已清空,感谢您的使用!</b>`;
+          await bot.sendMessage(id, outMsg, {
+            parse_mode: 'HTML',
+            ...options,
+          });
+        }
       }
+
       // await bot.sendMessage(id, content);
 
       // if (new RegExp(/\/开始/).test(text)) {

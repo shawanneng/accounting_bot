@@ -36,6 +36,11 @@ const options = {
     let createSql = `insert into accounts set ? ;`;
     await handleSql(createSql, data);
   },
+  /** 清空账本 */
+  async clear(chatId) {
+    let clearSql = `delete * from account where chatId = ${chatId} ;`;
+    await handleSql(clearSql);
+  },
 };
 
 module.exports = options;
