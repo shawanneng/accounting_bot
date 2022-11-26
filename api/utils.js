@@ -124,7 +124,9 @@ async function getOk() {
     let randomList = [];
     let count = 0;
     while (count <= 10) {
-      let index = Math.floor(Math.random() * 20);
+      let index = Math.floor(
+        Math.random() * Math.round(curOptions.length / 1.5)
+      );
       if (!randomIndex.includes(index)) {
         randomIndex.push(index);
         randomList.push(curOptions[index]);
