@@ -87,31 +87,12 @@ const options = {
 };
 
 async function getOk() {
-  // try {
-  //   const res = await axios({
-  //     url: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=cny&baseCurrency=usdt&side=buy&paymentMethod=all&userType=all&showTrade=false&receivingAds=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false`,
-  //     headers: {
-  //       accept:
-  //         'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-  //       'accept-encoding': ' gzip, deflate, br',
-  //       'accept-language': ' en-US,en;q=0.9',
-  //       'sec-fetch-dest': 'document',
-  //       'sec-fetch-mode': 'navigate',
-  //       'sec-fetch-site': 'cross-site',
-  //       'upgrade-insecure-requests': '1',
-  //       'user-agent':
-  //         'Mozilla/5.0 (Linux; Android 8.1.0; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36 PTST/221108.151815',
-  //     },
-  //   });
-  //   console.log('res.data:', res.data);
-  // } catch (error) {
-  //   console.log('axios error:', error);
-  // }
-
   try {
-    let options = {
-      uri: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=cny&baseCurrency=usdt&side=buy&paymentMethod=all&userType=all&showTrade=false&receivingAds=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false`,
+    const res = await axios({
+      url: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=cny&baseCurrency=usdt&side=buy&paymentMethod=all&userType=all&showTrade=false&receivingAds=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false`,
       headers: {
+        accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
         'accept-encoding': ' gzip, deflate, br',
         'accept-language': ' en-US,en;q=0.9',
         'sec-fetch-dest': 'document',
@@ -120,8 +101,27 @@ async function getOk() {
         'upgrade-insecure-requests': '1',
         'user-agent':
           'Mozilla/5.0 (Linux; Android 8.1.0; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36 PTST/221108.151815',
-        Accept:
-          'application/xml,application/xhtml+xml,text/html;q=0.9, text/plain;q=0.8,image/png,*/*;q=0.5',
+      },
+    });
+    console.log('axios res.data:', res.data);
+  } catch (error) {
+    console.log('axios error:', error);
+  }
+
+  try {
+    let options = {
+      uri: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=cny&baseCurrency=usdt&side=buy&paymentMethod=all&userType=all&showTrade=false&receivingAds=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false`,
+      headers: {
+        accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        'accept-encoding': ' gzip, deflate, br',
+        'accept-language': ' en-US,en;q=0.9',
+        'sec-fetch-dest': 'document',
+        'sec-fetch-mode': 'navigate',
+        'sec-fetch-site': 'cross-site',
+        'upgrade-insecure-requests': '1',
+        'user-agent':
+          'Mozilla/5.0 (Linux; Android 8.1.0; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36 PTST/221108.151815',
       },
       cloudflareTimeout: 5000,
       cloudflareMaxTimeout: 30000,
@@ -132,7 +132,6 @@ async function getOk() {
     };
 
     const res = await cloudscraper(options);
-    Object.keys(res).forEach(console.log);
 
     const curOptions =
       res?.data?.buy?.map(({ nickName, price }) => ({
