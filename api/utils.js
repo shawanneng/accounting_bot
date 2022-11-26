@@ -37,7 +37,8 @@ const options = {
     let createSql = `insert into accounts set ? ;`;
   },
   async getBigUsdt() {
-    const { data } = await axios({
+    let res = '';
+    res = await axios({
       url: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=CNY&baseCurrency=USDT&side=buy&paymentMethod=all&userType=all&showTrade=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false`,
       hedaers: {
         accept: 'application/json',
@@ -55,15 +56,19 @@ const options = {
         'x-cdn': 'https://static.okx.com',
         'x-utc': '8',
         Referer: 'https://www.okx.com/cn/p2p-markets/cny/sell-usdt',
+        cookie:
+          '__cf_bm=2NXSe_wxSN8OtfRMKLzXucO28V7GOdN7VbGXFgi1oB8-1669442396-0-AYhPbDTlhrVYQM+rLPgij/eVcNnNkgv6YoYkeP9eOdtbDlcWC5TKduo1lF9Nv/WN34mOck7AAgR/LF7d6SFsLXY=',
         'Referrer-Policy': 'strict-origin-when-cross-origin',
         'user-agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
       },
-    }).catch((x) => console.log('x:', x));
+    }).catch((x) => {
+      console.log('x:', x);
+      res = x.data;
+    });
 
-    console.log('data:', data);
+    return res;
   },
 };
 
-options.getBigUsdt();
 module.exports = options;

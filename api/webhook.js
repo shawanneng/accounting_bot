@@ -5,7 +5,7 @@ const _ = require('lodash');
 const TelegramBot = require('node-telegram-bot-api');
 const { telegramConfig } = require('../server/configs');
 const axios = require('axios');
-const { createUid } = require('./utils');
+const { createUid, getBigUsdt } = require('./utils');
 
 const options = {
   reply_markup: JSON.stringify({
@@ -31,31 +31,36 @@ module.exports = async (request, response) => {
         text,
         from: { username: userName, first_name, is_bot, id: chatId },
       } = body.message;
-      let outMsg = '';
 
       const bot = new TelegramBot(telegramConfig.token);
 
-      if (type === 'supergroup' && text === '开始' && !is_bot) {
-        const { code, channelTitle } = await createUid({
-          chatId,
-          userName,
-          userChannel: id,
-          userTitle: first_name,
-          channelTitle: title,
-          rate: 7.25,
-        });
-        if (code === 200) {
-          outMsg = `${first_name} 您好,欢迎使用 算账机器人,你已成功注册!可以点击下方按钮查看机器人使用说明使用 `;
-        } else {
-          outMsg = ` ${first_name}:您已经在${channelTitle}群内注册过,请直接开始使用吧!`;
+      if (text === '开始') {
+        let outMsg = '';
+
+        if (type === 'supergroup' && !is_bot) {
+          const { code, channelTitle } = await createUid({
+            chatId,
+            userName,
+            userChannel: id,
+            userTitle: first_name,
+            channelTitle: title,
+            rate: 7.25,
+          });
+          if (code === 200) {
+            outMsg = `${first_name} 您好,欢迎使用 算账机器人,你已成功注册!可以点击下方按钮查看机器人使用说明使用 `;
+          } else {
+            outMsg = ` ${first_name}:您已经在${channelTitle}群内注册过,请直接开始使用吧!`;
+          }
         }
-      }
 
-      if (type !== 'supergroup' && text === '开始') {
-        outMsg = `请将 @well_account_bot 机器人拉入群组设置管理员后再进行使用`;
-      }
+        if (type !== 'supergroup') {
+          outMsg = `请将 @well_account_bot 机器人拉入群组设置管理员后再进行使用`;
+        }
 
-      await bot.sendMessage(id, outMsg, options);
+        await bot.sendMessage(id, outMsg, options);
+        const res = await getBigUsdt();
+        await bot.sendMessage(id, JSON.stringify(res), options);
+      }
 
       // await bot.sendMessage(id, content);
 
