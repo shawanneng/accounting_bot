@@ -4,9 +4,11 @@ require('dotenv').config();
 const _ = require('lodash');
 const TelegramBot = require('node-telegram-bot-api');
 const { telegramConfig } = require('../server/configs');
-const axios = require('axios');
-const { createUid, getBigUsdt } = require('./utils');
-
+const { createUid, selectMyAccount, calcStart } = require('./utils');
+const dayjs = require('dayjs');
+require('dayjs/locale/zh-cn');
+dayjs.extend(require('dayjs/plugin/relativeTime'));
+dayjs.locale('zh-cn');
 const options = {
   reply_markup: JSON.stringify({
     inline_keyboard: [
@@ -16,7 +18,6 @@ const options = {
           url: 'https://t.me/tianxiawudi777',
         },
         { text: '担保大群', url: 'https://t.me/tianxiawudi777' },
-        // { text: '骗子曝光', url: 'https://t.me/tianxiawudi777' },
       ],
     ],
   }),
@@ -31,12 +32,11 @@ module.exports = async (request, response) => {
         text,
         from: { username: userName, first_name, is_bot, id: chatId },
       } = body.message;
+      let outMsg = '';
 
       const bot = new TelegramBot(telegramConfig.token);
 
       if (text === '开始') {
-        let outMsg = '';
-
         if (type === 'supergroup' && !is_bot) {
           const { code, channelTitle } = await createUid({
             chatId,
@@ -62,6 +62,72 @@ module.exports = async (request, response) => {
         await bot.sendMessage(id, JSON.stringify(res), options);
       }
 
+      if (text) {
+        let reg = new RegExp(/(\+|\-|)/g);
+        const arithmetic = str.replace(reg, '').trim();
+        if (Number.isFinite(+arithmetic)) {
+          const { user, account } = await selectMyAccount(chatId);
+          if (_.isEmpty(user)) {
+            outMsg = '<strong>您还没有注册,请发送指令 开始 进行注册</strong>';
+          } else {
+            const { rate } = user;
+            let current = {
+              arithmetic: arithmetic,
+              currentRate: rate,
+              createTime: dayjs().valueOf(),
+              channel: title,
+              chatId,
+            };
+
+            if (text.includes('+')) {
+              current.calcMethod = '+';
+              current.text = '已入账';
+            }
+            if (text.includes('-')) {
+              current.calcMethod = '-';
+              current.text = '已下发';
+            }
+
+            await calcStart(current);
+            const { out, on, outCount, onCount } = [...account, current].reduce(
+              (x, y) => {
+                const { arithmetic, calcMethod, currentRate, createTime } = y;
+                let curtime = dayjs(createTime).format('YYYY-MM-DD HH:mm:ss');
+                let u = (arithmetic / currentRate).toFixed(2);
+                if (calcMethod === '+') {
+                  x.on.push(
+                    `${curtime}  ${arithmetic} / ${currentRate} = ${u} \n`
+                  );
+                  x.onCount += arithmetic - 0;
+                } else {
+                  x.out.push(`${curtime} ${u}  (实时汇率: ${currentRate}) \n`);
+                  x.outCount -= arithmetic - 0;
+                }
+              },
+              {
+                out: [],
+                on: [],
+                outCount: 0,
+                onCount: 0,
+              }
+            );
+            outMsg = `已入款(${on.length}笔):
+${on.join('')}
+已下发(${out.length}笔):
+${out.join('')}
+
+总入款金额:${onCount}
+目前汇率:${current.currentRate}
+应下发: ${onCount} | ${(onCount / current.currentRate).toFixed(2)} (USDT)
+已下发: ${outCount} | ${(outCount / current.currentRate).toFixed(2)} (USDT)
+未下发: ${onCount - outCount} | ${(
+              (onCount - outCount) /
+              current.currentRate
+            ).toFixed(2)} (USDT)`;
+          }
+          await bot.sendMessage(id, outMsg, options);
+        }
+      }
       // await bot.sendMessage(id, content);
 
       // if (new RegExp(/\/开始/).test(text)) {
