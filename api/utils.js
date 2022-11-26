@@ -1,7 +1,7 @@
 const handleSql = require('./db');
 const _ = require('lodash');
 const axios = require('./app/request');
-
+const FormData = require('form-data');
 const options = {
   /** 创建一个用户数据 */
   async createUid(data) {
@@ -49,28 +49,64 @@ const options = {
   },
   /** 查询u账户余额 */
   async checkUaddress(address) {
+    let formdata = new FormData();
+
+    formdata.append(
+      'url',
+      `https://apilist.tronscanapi.com/api/account/token_asset_overview?address=${address}`
+    );
+    formdata.append('seltype', 'get');
+    formdata.append('ck', '');
+    formdata.append('header', '');
+    formdata.append('parms', '');
+    formdata.append('proxy', '');
+    formdata.append('code', 'utf8');
+    formdata.append('j', '1');
+    formdata.append('ct', 'application/x-www-form-urlencoded');
+
     const { data } = await axios({
-      url: `https://apilist.tronscanapi.com/api/account/token_asset_overview?address=${address}`,
+      url: `http://coolaf.com/tool/ajaxgp`,
+      method: 'POST',
       headers: {
-        accept: 'application/json, text/plain, */*',
+        ...formdata.getHeaders(),
+        accept: 'application/json, text/javascript, */*; q=0.01',
         'accept-language': 'zh-CN,zh;q=0.9',
-        // 'cache-control': 'no-cache',
-        // pragma: 'no-cache',
-        // 'sec-ch-ua':
-        //   '"Google Chrome";v="105", ")Not;A=Brand";v="8", "Chromium";v="105"',
-        // 'sec-ch-ua-mobile': '?0',
-        // 'sec-ch-ua-platform': '"Windows"',
-        // 'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'cross-site',
-        Referer: 'https://tronscan.org/',
-        'Referrer-Policy': 'strict-origin-when-cross-origin',
+        'cache-control': 'no-cache',
+        pragma: 'no-cache',
+        'x-requested-with': 'XMLHttpRequest',
+        Referer: 'http://coolaf.com/',
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
       },
+      method: 'post',
+      data: formdata,
     });
+    let body = [];
+    try {
+      body = JSON.parse(data?.data?.response);
+    } catch (error) {}
+    // const { data } = await axios({
+    //   url: `https://apilist.tronscanapi.com/api/account/token_asset_overview?address=${address}`,
+    //   headers: {
+    //     accept: 'application/json, text/plain, */*',
+    //     'accept-language': 'zh-CN,zh;q=0.9',
+    //     // 'cache-control': 'no-cache',
+    //     // pragma: 'no-cache',
+    //     // 'sec-ch-ua':
+    //     //   '"Google Chrome";v="105", ")Not;A=Brand";v="8", "Chromium";v="105"',
+    //     // 'sec-ch-ua-mobile': '?0',
+    //     // 'sec-ch-ua-platform': '"Windows"',
+    //     // 'sec-fetch-dest': 'empty',
+    //     'sec-fetch-mode': 'cors',
+    //     'sec-fetch-site': 'cross-site',
+    //     Referer: 'https://tronscan.org/',
+    //     'Referrer-Policy': 'strict-origin-when-cross-origin',
+    //     'User-Agent':
+    //       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
+    //   },
+    // });
     let res =
-      data?.data?.reduce((x, y) => {
+      body?.data?.reduce((x, y) => {
         switch (y.tokenAbbr) {
           case 'trx':
             x.trx = y.assetInTrx;
