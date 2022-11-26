@@ -64,7 +64,7 @@ module.exports = async (request, response) => {
         let reg = new RegExp(/(\+|\-|)/g);
         const arithmetic = text.replace(reg, '').trim();
         if (Number.isFinite(+arithmetic)) {
-          const { user, account } = await selectMyAccount(chatId);
+          const { user, account = [] } = await selectMyAccount(chatId);
           if (_.isEmpty(user)) {
             outMsg = '<strong>您还没有注册,请发送指令 开始 进行注册</strong>';
           } else {

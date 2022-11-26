@@ -24,10 +24,10 @@ const options = {
       handleSql(usersql, { chatId }),
       handleSql(accountsql, { chatId }),
     ]);
-    const [user, account = []] = result.map((x) => x.value[0]);
+    const [user, account = []] = result.map((x) => x.value);
 
     return {
-      user,
+      user: user?.[0],
       account,
     };
   },
