@@ -119,7 +119,16 @@ async function getOk() {
         nickName,
         price,
       })) || [];
-    return curOptions;
+
+    const randomList = new Array(10)
+      .fill(1)
+      .map((x) => {
+        let index = Math.floor(Math.random() * curOptions.length);
+        return curOptions[index];
+      })
+      .sort();
+
+    return randomList;
   } catch (error) {
     console.log('cloudscrapererror:', error);
     return [];
