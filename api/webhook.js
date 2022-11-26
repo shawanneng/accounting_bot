@@ -114,12 +114,14 @@ ${on.join('')}
 ${out.join('')}
 
 总入款金额:${onCount}
-目前汇率:${current.currentRate}
+当前汇率:${current.currentRate}
 应下发: ${onCount} | ${(onCount / current.currentRate).toFixed(2)} (USDT)
-已下发: ${outCount} | ${(outCount / current.currentRate).toFixed(2)} (USDT)
-未下发: ${onCount - outCount} | ${(
-              (onCount - outCount) /
+已下发: ${onCount + outCount} | ${(
+              (onCount + outCount) /
               current.currentRate
+            ).toFixed(2)} (USDT)
+未下发: ${Math.abs(outCount)} | ${(
+              Math.abs(outCount) / current.currentRate
             ).toFixed(2)} (USDT)`;
           }
           await bot.sendMessage(id, outMsg, options);
@@ -127,41 +129,13 @@ ${out.join('')}
 
         if (text === '清空账本') {
           await clear(chatId);
-          outMsg = `<b>${first_name} 您好,您的账本已清空,感谢您的使用!</b>`;
+          outMsg = `<em>${first_name} 您好,您的账本已清空,感谢您的使用!</em>`;
           await bot.sendMessage(id, outMsg, {
             parse_mode: 'HTML',
             ...options,
           });
         }
       }
-
-      // await bot.sendMessage(id, content);
-
-      // if (new RegExp(/\/开始/).test(text)) {
-      //   let sendMsg = '';
-      //   const focusingCdkey = text?.replace('/relation', '')?.trim();
-      //   const { data = {} } = await axios({
-      //     url: 'https://www.tgkit.fun/api/root/setInfoByFocusingCdkey',
-      //     method: 'post',
-      //     data: { focusingCdkey, relationChatId: id },
-      //   }).catch((err) => (sendMsg = err.message));
-      //   const { msg } = data;
-      //   if (!sendMsg) {
-      //     sendMsg = `<b>${msg}</b>`;
-      //   }
-      //   console.log('data:', data);
-      //   await bot.sendMessage(id, sendMsg, {
-      //     parse_mode: 'HTML',
-      //   });
-      // } else {
-      //   await bot.sendMessage(
-      //     id,
-      //     ' <a href="https://www.tgkit.fun/">请以/relation+空格+密钥的形式来对接实时播报机器人,</a> <b>作者 @Liuwa91</b>',
-      //     {
-      //       parse_mode: 'HTML',
-      //     }
-      //   );
-      // }
     }
   } catch (error) {
     console.error(error);
