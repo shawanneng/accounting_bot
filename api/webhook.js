@@ -123,50 +123,7 @@ module.exports = async (request, response) => {
             }
 
             await calcStart(current);
-            const { out, on, outCount, onCount } = [...account, current].reduce(
-              (x, y) => {
-                const { arithmetic, calcMethod, currentRate, createTime } = y;
-                let curtime = gettime(createTime).format('MM-dd hh:mm:ss');
-                let u = (arithmetic / currentRate).toFixed(2);
-                if (calcMethod === '+') {
-                  x.on.push(
-                    `${curtime}  ${arithmetic} / ${currentRate} = ${u} (USDT)\n`
-                  );
-                  x.onCount += arithmetic - 0;
-                } else if (calcMethod === '-') {
-                  x.out.push(`${curtime} ${u}  (实时汇率: ${currentRate}) \n`);
-                  x.outCount -= arithmetic - 0;
-                } else {
-                  x.out.push(
-                    `${curtime} 下发${arithmetic}  (实时汇率: ${currentRate}) \n`
-                  );
-                  x.outCount -= (arithmetic * currentRate).toFixed(2);
-                }
-                return x;
-              },
-              {
-                out: [],
-                on: [],
-                outCount: 0,
-                onCount: 0,
-              }
-            );
-            outMsg = `已入账(${on.length}笔):
-${on.join('')}
-已下发(${out.length}笔):
-${out.join('')}
-
-总入款金额:${onCount}
-当前汇率:${current.currentRate}
-应下发: ${onCount}  |  ${(onCount / current.currentRate).toFixed(2)} (USDT)
-已下发: ${Math.abs(outCount)}  |  ${(
-              Math.abs(outCount) / current.currentRate
-            ).toFixed(2)} (USDT)
-未下发: ${onCount + outCount}  |  ${(
-              (onCount + outCount) /
-              current.currentRate
-            ).toFixed(2)} (USDT)
-共计${on.length + out.length}笔`;
+            editMsg(account, current);
           }
           await bot.sendMessage(id, outMsg, options);
         }
@@ -198,3 +155,55 @@ ${out.join('')}
     response.send();
   }
 };
+
+function editMsg(account, current) {
+  let msg = '';
+  if (!_.isEmpty(current)) {
+    const { out, on, outCount, onCount } = [...account, current].reduce(
+      (x, y) => {
+        const { arithmetic, calcMethod, currentRate, createTime } = y;
+        let curtime = gettime(createTime).format('MM-dd hh:mm:ss');
+        let u = Math.round(arithmetic / currentRate);
+        if (calcMethod === '+') {
+          x.on.push(
+            `${curtime}  ${arithmetic} / ${currentRate} = ${u} (USDT)\n`
+          );
+          x.onCount += arithmetic - 0;
+        } else if (calcMethod === '-') {
+          x.out.push(`${curtime} ${u}U  (实时汇率: ${currentRate}) \n`);
+          x.outCount -= arithmetic - 0;
+        } else {
+          x.out.push(
+            `${curtime} 下发${arithmetic}U  (实时汇率: ${currentRate}) \n`
+          );
+          x.outCount -= (arithmetic * currentRate).toFixed(2);
+        }
+        return x;
+      },
+      {
+        out: [],
+        on: [],
+        outCount: 0,
+        onCount: 0,
+      }
+    );
+    msg = `已入账(${on.length}笔):
+  ${on.join('')}
+  已下发(${out.length}笔):
+  ${out.join('')}
+  
+  总入款金额:${onCount}
+  当前汇率:${current.currentRate}
+  应下发: ${onCount}  |  ${(onCount / current.currentRate).toFixed(2)} (USDT)
+  已下发: ${Math.abs(outCount)}  |  ${(
+      Math.abs(outCount) / current.currentRate
+    ).toFixed(2)} (USDT)
+  未下发: ${onCount + outCount}  |  ${(
+      (onCount + outCount) /
+      current.currentRate
+    ).toFixed(2)} (USDT)
+  共计${on.length + out.length}笔`;
+  }
+
+  return msg;
+}
