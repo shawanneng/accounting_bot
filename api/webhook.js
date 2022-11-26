@@ -123,7 +123,7 @@ module.exports = async (request, response) => {
             }
 
             await calcStart(current);
-            editMsg(account, current);
+            outMsg = editMsg(account, current);
           }
           await bot.sendMessage(id, outMsg, options);
         }
