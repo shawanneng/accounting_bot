@@ -1,6 +1,6 @@
 const handleSql = require('./db');
 const _ = require('lodash');
-const axios = require('axios');
+const axios = require('./app/request');
 
 const options = {
   /** 创建一个用户数据 */
@@ -69,7 +69,6 @@ const options = {
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
       },
     });
-
     let res =
       data?.data?.reduce((x, y) => {
         switch (y.tokenAbbr) {

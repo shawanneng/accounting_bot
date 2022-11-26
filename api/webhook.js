@@ -165,17 +165,17 @@ module.exports = async (request, response) => {
             ...options,
           }
         );
-        //         if (!_.isEmpty(res)) {
-        //           const { trx, usdt } = res;
-        //           outMsg = `您查询的地址 : <code>${text}</code>
-        // 目前trx余额: <code>${trx}</code>
-        // 目前usdt余额: <code>${usdt}</code>`;
+        if (!_.isEmpty(res)) {
+          const { trx, usdt } = res;
+          outMsg = `您查询的地址 : <code>${text}</code>
+        目前trx余额: <code>${trx}</code>
+        目前usdt余额: <code>${usdt}</code>`;
 
-        //           await bot.sendMessage(id, outMsg, {
-        //             parse_mode: 'HTML',
-        //             ...options,
-        //           });
-        //         }
+          await bot.sendMessage(id, outMsg, {
+            parse_mode: 'HTML',
+            ...options,
+          });
+        }
       }
     }
   } catch (error) {
