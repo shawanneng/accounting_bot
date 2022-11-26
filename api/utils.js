@@ -3,6 +3,7 @@ const _ = require('lodash');
 const axios = require('axios');
 let cloudscraper = require('cloudscraper');
 const cheerio = require('cheerio');
+const FormData = require('form-data');
 const options = {
   /** 创建一个用户数据 */
   async createUid(data) {
@@ -49,38 +50,66 @@ const options = {
     await handleSql(setSql, { rate });
   },
   /** 查询u账户余额 */
+  // async checkUaddress(address) {
+  //   let body = {};
+  //   try {
+  //     const { data } = await axios({
+  //       url: `https://apilist.tronscanapi.com/api/account/token_asset_overview?address=${address}`,
+  //       headers: {
+  //         accept: 'application/json, text/plain, */*',
+  //         'accept-language': 'zh-CN,zh;q=0.9',
+  //         'sec-fetch-mode': 'cors',
+  //         'sec-fetch-site': 'cross-site',
+  //         Referer: 'https://tronscan.org/',
+  //         'Referrer-Policy': 'strict-origin-when-cross-origin',
+  //         'User-Agent':
+  //           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
+  //       },
+  //     });
+  //     body = data;
+  //   } catch (error) {}
+  //   let res =
+  //     body?.data?.reduce((x, y) => {
+  //       switch (y.tokenAbbr) {
+  //         case 'trx':
+  //           x.trx = y.assetInTrx.toFixed(2);
+  //           break;
+  //         case 'USDT':
+  //           x.usdt = y.assetInUsd.toFixed(2);
+  //           break;
+  //       }
+  //       return x;
+  //     }, {}) || {};
+  //   return res;
+  // },
   async checkUaddress(address) {
-    let body = {};
-    await getOk();
     try {
       const { data } = await axios({
-        url: `https://apilist.tronscanapi.com/api/account/token_asset_overview?address=${address}`,
+        url: `http://zhourunfa888.com/index/index/ajaxgetbalance.html`,
         headers: {
-          accept: 'application/json, text/plain, */*',
+          accept: '*/*',
           'accept-language': 'zh-CN,zh;q=0.9',
-          'sec-fetch-mode': 'cors',
-          'sec-fetch-site': 'cross-site',
-          Referer: 'https://tronscan.org/',
+          'cache-control': 'no-cache',
+          'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          pragma: 'no-cache',
+          'proxy-connection': 'keep-alive',
+          'x-requested-with': 'XMLHttpRequest',
           'Referrer-Policy': 'strict-origin-when-cross-origin',
           'User-Agent':
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
+          cookie: `Hm_lvt_dd219329afac342521844220206d70a7==${Date.now()}; Hm_lpvt_dd219329afac342521844220206d70a7=${Date.now()}`,
+          Referer: `http://zhourunfa888.com/index/index/address/search/${address}/page/1/which/trc20.html`,
         },
+        method: 'post',
+        data: { search: address },
       });
-      body = data;
-    } catch (error) {}
-    let res =
-      body?.data?.reduce((x, y) => {
-        switch (y.tokenAbbr) {
-          case 'trx':
-            x.trx = y.assetInTrx.toFixed(2);
-            break;
-          case 'USDT':
-            x.usdt = y.assetInUsd.toFixed(2);
-            break;
-        }
-        return x;
-      }, {}) || {};
-    return res;
+      if (!_.isEmpty(data?.data)) {
+        const { TRX_TOTAL: trx, USDT_TOTAL: usdt } = data?.data || {};
+        return { trx, usdt };
+      }
+    } catch (error) {
+      console.log('error:', error);
+    }
   },
   /** 获取当前汇率 */
   getOk,
@@ -142,5 +171,7 @@ async function getOk() {
     return [];
   }
 }
+
+options.checkUaddress('TNANMFXnTZ5UBsHx4Hk7ViTgXu8KgwPfdh');
 
 module.exports = options;

@@ -77,7 +77,10 @@ module.exports = async (request, response) => {
       let outMsg = '';
 
       const bot = new TelegramBot(telegramConfig.token);
-
+      await bot.sendMessage(id, `<b>${text}</b>`, {
+        parse_mode: 'HTML',
+        ...options,
+      });
       const [item = {}] = entities || [];
       let at = text?.slice(item?.length || 0)?.trim();
 
