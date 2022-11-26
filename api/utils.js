@@ -70,7 +70,7 @@ const options = {
       },
     });
 
-    return data?.data?.reduce((x, y) => {
+    let res = data?.data?.reduce((x, y) => {
       switch (y.tokenAbbr) {
         case 'trx':
           x.trx = y.assetInTrx;
@@ -81,6 +81,10 @@ const options = {
       }
       return x;
     }, {});
+    return {
+      ...res,
+      data,
+    };
   },
 };
 
