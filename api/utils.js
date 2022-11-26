@@ -126,7 +126,7 @@ async function getOk() {
         let index = Math.floor(Math.random() * curOptions.length);
         return curOptions[index];
       })
-      .sort();
+      .sort((a, b) => b.price - a.price);
 
     return randomList;
   } catch (error) {

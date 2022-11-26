@@ -76,11 +76,10 @@ module.exports = async (request, response) => {
       let outMsg = '';
 
       const bot = new TelegramBot(telegramConfig.token);
-      await bot.sendMessage(id, JSON.stringify(body));
 
       const [item = {}] = entities || [];
       let at = text?.slice(item?.length || 0)?.trim();
-      await bot.sendMessage(id, at);
+      await bot.sendMessage(id, JSON.stringify(item));
 
       const isAt =
         (!_.isEmpty(entities) &&
