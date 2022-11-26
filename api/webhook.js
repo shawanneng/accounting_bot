@@ -75,6 +75,9 @@ module.exports = async (request, response) => {
         entities,
       } = body.message;
       let outMsg = '';
+      if (is_bot) {
+        return;
+      }
 
       const bot = new TelegramBot(telegramConfig.token);
 
