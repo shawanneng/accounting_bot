@@ -38,7 +38,6 @@ function gettime(time) {
       (parseInt(new Date(time).getTimezoneOffset() / 60) + 8) * 3600 * 1000
   );
 }
-console.log('a:', a);
 const options = {
   reply_markup: JSON.stringify({
     inline_keyboard: [
