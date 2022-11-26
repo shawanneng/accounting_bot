@@ -171,7 +171,7 @@ ${out.join('')}
           });
         }
 
-        let setRatereg = new RegExp(/设置费率/g);
+        let setRatereg = new RegExp(/设置费率/);
         const rate = text.replace(setRatereg, '').trim();
         if (Number.isFinite(+rate)) {
           await setRate(rate, chatId);
