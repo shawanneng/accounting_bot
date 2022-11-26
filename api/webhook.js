@@ -75,12 +75,12 @@ module.exports = async (request, response) => {
 
       if (text === '1') {
         let list = await getOk();
-        list = list.map(
-          (x) => `<pre><b>${x.nickName}</b><code>${x.price}</code></pre>`
-        );
-        outMsg = `<b>当前北京时间:${gettime(Date.now()).format(
-          'yyyy-MM-dd hh:mm:ss'
-        )}</b>\n<i>当前USDT费率</i>${list.join('\n')}`;
+        list = list
+          .map(
+            (x) => `<strong>${x.nickName}</strong><strong>${x.price}</strong>\n`
+          )
+          .filter((__, i) => i <= 10);
+        outMsg = `<i>当前USDT费率</i>\n ${list.join('')}`;
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
           ...options,
