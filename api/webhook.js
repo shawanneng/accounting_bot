@@ -98,7 +98,7 @@ module.exports = async (request, response) => {
           .filter((__, i) => i <= 10);
         outMsg = `<em>当前实时USDT价格</em>\n${list.join(
           ''
-        )}<a href="https://www.okx.com/cn/p2p-markets/cny/sell-usdt">实时价格参考</a>\n`;
+        )}（<b><a href="https://www.okx.com/cn/p2p-markets/cny/sell-usdt">实时价格参考</a></b>）\n`;
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
           ...options,
