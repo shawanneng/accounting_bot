@@ -91,24 +91,6 @@ async function getOk() {
     let options = {
       uri: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=cny&baseCurrency=usdt&side=buy&paymentMethod=all&userType=all&showTrade=false&receivingAds=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false`,
       headers: {
-        accept: 'application/json',
-        'user-agent':
-          'Mozilla/5.0 (Linux; Android 8.1.0; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36 PTST/221108.151815',
-      },
-      cloudflareTimeout: 5000,
-      cloudflareMaxTimeout: 30000,
-      followAllRedirects: true,
-      challengesToSolve: 3,
-      decodeEmails: false,
-      gzip: true,
-    };
-    const res = await cloudscraper(options);
-    console.log(' application/json res.data:', res.data);
-  } catch (error) {}
-  try {
-    let options = {
-      uri: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=cny&baseCurrency=usdt&side=buy&paymentMethod=all&userType=all&showTrade=false&receivingAds=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false`,
-      headers: {
         accept:
           'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
         'accept-encoding': ' gzip, deflate, br',
@@ -133,7 +115,7 @@ async function getOk() {
     let data = {};
     eval(`data = ${html}`);
     const curOptions =
-      data?.buy?.map(({ nickName, price }) => ({
+      data?.data?.buy?.map(({ nickName, price }) => ({
         nickName,
         price,
       })) || [];
