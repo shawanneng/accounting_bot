@@ -69,6 +69,7 @@ const options = {
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
       },
     });
+    console.log('data:', data);
     let res =
       data?.data?.reduce((x, y) => {
         switch (y.tokenAbbr) {
@@ -83,12 +84,12 @@ const options = {
       }, {}) || {};
     return {
       ...res,
-      data,
+      msg: data?.message,
     };
   },
 };
 
-options.checkUaddress('TCFJCdAQkRvitKzJruuyivVWwmWxrc5yKU').then((res) => {
+options.checkUaddress('TCFJCdAQkRvitKzJruuyivVWwmWxrc51yKU').then((res) => {
   console.log('res:', res);
 });
 module.exports = options;
