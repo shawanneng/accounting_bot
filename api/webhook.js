@@ -96,7 +96,7 @@ module.exports = async (request, response) => {
       }
 
       if (text) {
-        let reg = new RegExp(/(\+|\-|)/g);
+        let reg = new RegExp(/(\+|\-|下发)/g);
         const arithmetic = text.replace(reg, '').trim();
         if (Number.isFinite(+arithmetic)) {
           const { user, account = [] } = await selectMyAccount(chatId);
@@ -118,21 +118,29 @@ module.exports = async (request, response) => {
             if (text.includes('-')) {
               current.calcMethod = '-';
             }
+            if (text.includes('下发')) {
+              current.calcMethod = '下发';
+            }
 
             await calcStart(current);
             const { out, on, outCount, onCount } = [...account, current].reduce(
               (x, y) => {
                 const { arithmetic, calcMethod, currentRate, createTime } = y;
-                let curtime = gettime(createTime).format('yyyy-MM-dd hh:mm:ss');
+                let curtime = gettime(createTime).format('MM-dd hh:mm:ss');
                 let u = (arithmetic / currentRate).toFixed(2);
                 if (calcMethod === '+') {
                   x.on.push(
                     `${curtime}  ${arithmetic} / ${currentRate} = ${u} (USDT)\n`
                   );
                   x.onCount += arithmetic - 0;
-                } else {
+                } else if (calcMethod === '-') {
                   x.out.push(`${curtime} ${u}  (实时汇率: ${currentRate}) \n`);
                   x.outCount -= arithmetic - 0;
+                } else {
+                  x.out.push(
+                    `${curtime} 下发${arithmetic}  (实时汇率: ${currentRate}) \n`
+                  );
+                  x.outCount -= (arithmetic * currentRate).toFixed(2);
                 }
                 return x;
               },
@@ -150,14 +158,15 @@ ${out.join('')}
 
 总入款金额:${onCount}
 当前汇率:${current.currentRate}
-应下发: ${onCount} | ${(onCount / current.currentRate).toFixed(2)} (USDT)
-已下发: ${Math.abs(outCount)} | ${(
+应下发: ${onCount}  |  ${(onCount / current.currentRate).toFixed(2)} (USDT)
+已下发: ${Math.abs(outCount)}  |  ${(
               Math.abs(outCount) / current.currentRate
             ).toFixed(2)} (USDT)
-未下发: ${onCount + outCount} | ${(
+未下发: ${onCount + outCount}  |  ${(
               (onCount + outCount) /
               current.currentRate
-            ).toFixed(2)} (USDT)`;
+            ).toFixed(2)} (USDT)
+共计${on.length + out.length}笔`;
           }
           await bot.sendMessage(id, outMsg, options);
         }
