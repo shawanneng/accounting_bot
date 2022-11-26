@@ -70,17 +70,18 @@ const options = {
       },
     });
 
-    let res = data?.data?.reduce((x, y) => {
-      switch (y.tokenAbbr) {
-        case 'trx':
-          x.trx = y.assetInTrx;
-          break;
-        case 'USDT':
-          x.usdt = y.assetInUsd;
-          break;
-      }
-      return x;
-    }, {});
+    let res =
+      data?.data?.reduce((x, y) => {
+        switch (y.tokenAbbr) {
+          case 'trx':
+            x.trx = y.assetInTrx;
+            break;
+          case 'USDT':
+            x.usdt = y.assetInUsd;
+            break;
+        }
+        return x;
+      }, {}) || {};
     return {
       ...res,
       data,
