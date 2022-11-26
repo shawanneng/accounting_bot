@@ -215,7 +215,7 @@ ${out.join('')}
   
 <code>总入款金额:${onCount}</code>
 <code>当前汇率:${current.currentRate}</code>
-<code>应下发: ${onCount} | ${(onCount / current.currentRate).toFixed(
+<code>应下发: ${onCount.toFixed(2)} | ${(onCount / current.currentRate).toFixed(
       2
     )} (USDT)</code>
 <code>已下发: ${Math.abs(outCount).toFixed(2)} | ${(

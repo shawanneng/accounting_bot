@@ -81,7 +81,7 @@ const options = {
       method: 'post',
       data: formdata,
     });
-    let body = [];
+    let body = {};
     try {
       body = JSON.parse(data?.data?.response);
     } catch (error) {}
