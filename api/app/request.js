@@ -1,6 +1,12 @@
 const axios = require('axios');
-
-const instance = axios.create();
+const _ = require('lodash');
+const https = require('https');
+const http = require('http');
+const instance = axios.create({
+  httpAgent: new http.Agent({ keepAlive: true }),
+  httpsAgent: new https.Agent({ keepAlive: true }),
+  withCredentials: true,
+});
 // const headers = {
 //   'content-type': 'application/json',
 //   'accept-language': 'zh-CN,zh;q=0.9',
@@ -22,6 +28,16 @@ instance.interceptors.request.use(
     const [Referer] = rep.exec(config.url);
     config.headers.Referer = Referer;
 
+    try {
+      const { data } = await axios({
+        url: 'https://cn.lwwangluo.store/cn',
+      });
+      console.log('data:', data);
+      const proxy = _.pick(data, ['host', 'port']);
+      if (!_.isEmpty(proxy)) {
+        config.proxy = proxy;
+      }
+    } catch (error) {}
     return config;
   },
   (error) => ({})

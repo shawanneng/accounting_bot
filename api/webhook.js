@@ -157,19 +157,12 @@ module.exports = async (request, response) => {
       let filter = /^[a-zA-Z0-9_]{0,}$/;
       if (filter.test(text) && text.length === 34) {
         const res = await checkUaddress(text);
-        await bot.sendMessage(
-          id,
-          `<pre>${JSON.stringify(res)}</pre><code>${text}</code>`,
-          {
-            parse_mode: 'HTML',
-            ...options,
-          }
-        );
+
         if (!_.isEmpty(res)) {
           const { trx, usdt } = res;
           outMsg = `您查询的地址 : <code>${text}</code>
-        目前trx余额: <code>${trx}</code>
-        目前usdt余额: <code>${usdt}</code>`;
+目前trx余额: <code>${trx}</code>
+目前usdt余额: <code>${usdt}</code>`;
 
           await bot.sendMessage(id, outMsg, {
             parse_mode: 'HTML',
