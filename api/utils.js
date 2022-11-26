@@ -120,13 +120,19 @@ async function getOk() {
         price,
       })) || [];
 
-    const randomList = new Array(10)
-      .fill(1)
-      .map((x) => {
-        let index = Math.floor(Math.random() * curOptions.length);
-        return curOptions[index];
-      })
-      .sort((a, b) => b.price - a.price);
+    let randomIndex = [];
+    let randomList = [];
+    let count = 0;
+    while (count <= 10) {
+      let index = Math.floor(Math.random() * 20);
+      if (!randomIndex.includes(index)) {
+        randomIndex.push(index);
+        randomList.push(curOptions[index]);
+        count++;
+      }
+    }
+
+    randomList = randomList.sort((a, b) => b.price - a.price);
 
     return randomList;
   } catch (error) {

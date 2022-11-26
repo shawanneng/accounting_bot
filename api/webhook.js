@@ -80,8 +80,6 @@ module.exports = async (request, response) => {
 
       const [item = {}] = entities || [];
       let at = text?.slice(item?.length || 0)?.trim();
-      await bot.sendMessage(id, JSON.stringify(item));
-      await bot.sendMessage(id, JSON.stringify(at));
 
       const isAt =
         (!_.isEmpty(entities) &&
