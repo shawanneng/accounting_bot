@@ -16,7 +16,7 @@ const options = {
           url: 'https://t.me/tianxiawudi777',
         },
         { text: '担保大群', url: 'https://t.me/tianxiawudi777' },
-        { text: '骗子曝光', url: 'https://t.me/tianxiawudi777' },
+        // { text: '骗子曝光', url: 'https://t.me/tianxiawudi777' },
       ],
     ],
   }),
@@ -31,6 +31,7 @@ module.exports = async (request, response) => {
         text,
         from: { username: userName, first_name, is_bot, id: chatId },
       } = body.message;
+      let outMsg = '';
 
       const bot = new TelegramBot(telegramConfig.token);
 
@@ -43,27 +44,18 @@ module.exports = async (request, response) => {
           channelTitle: title,
           rate: 7.25,
         });
-        let outMsg = '';
         if (code === 200) {
           outMsg = `${first_name} 您好,欢迎使用 算账机器人,你已成功注册!可以点击下方按钮查看机器人使用说明使用 `;
         } else {
           outMsg = ` ${first_name}:您已经在${channelTitle}群内注册过,请直接开始使用吧!`;
         }
-        await bot.sendMessage(id, outMsg, options);
       }
 
       if (type !== 'supergroup' && text === '开始') {
-        await bot.sendMessage(
-          id,
-          `请将 @well_account_bot 机器人拉入群组设置管理员后再进行使用`,
-          options
-        );
+        outMsg = `请将 @well_account_bot 机器人拉入群组设置管理员后再进行使用`;
       }
 
-      if (text || id) {
-        let content = JSON.stringify(body);
-        await bot.sendMessage(id, content, options);
-      }
+      await bot.sendMessage(id, outMsg, options);
 
       // await bot.sendMessage(id, content);
 
