@@ -22,7 +22,8 @@ module.exports = async (request, response) => {
 
       let content = JSON.stringify(body);
 
-      await bot.sendMessage(id, content);
+      await bot.sendMessage(id, text);
+      // await bot.sendMessage(id, content);
 
       // if (new RegExp(/\/开始/).test(text)) {
       //   let sendMsg = '';
