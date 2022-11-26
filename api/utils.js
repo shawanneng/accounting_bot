@@ -2,7 +2,7 @@ const handleSql = require('./db');
 const _ = require('lodash');
 const axios = require('axios');
 let cloudscraper = require('cloudscraper');
-
+const cheerio = require('cheerio');
 const options = {
   /** 创建一个用户数据 */
   async createUid(data) {
@@ -91,8 +91,7 @@ async function getOk() {
     const res = await axios({
       url: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=cny&baseCurrency=usdt&side=buy&paymentMethod=all&userType=all&showTrade=false&receivingAds=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false`,
       headers: {
-        accept:
-          'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        accept: 'application/json',
         'accept-encoding': ' gzip, deflate, br',
         'accept-language': ' en-US,en;q=0.9',
         'sec-fetch-dest': 'document',
@@ -132,7 +131,9 @@ async function getOk() {
     };
 
     const res = await cloudscraper(options);
-
+    const $ = cheerio.load(res);
+    let html = $('pre').html();
+    console.log('html:', html);
     const curOptions =
       res?.data?.buy?.map(({ nickName, price }) => ({
         nickName,
