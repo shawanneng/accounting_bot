@@ -99,6 +99,7 @@ module.exports = async (request, response) => {
                   x.out.push(`${curtime} ${u}  (实时汇率: ${currentRate}) \n`);
                   x.outCount -= arithmetic - 0;
                 }
+                return x;
               },
               {
                 out: [],
