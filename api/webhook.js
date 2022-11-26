@@ -236,7 +236,7 @@ function editMsg(account, current) {
           x.on.push(`${curtime}  ${arithmetic} / ${currentRate}= ${u}U\n`);
           x.onCount += arithmetic - 0;
         } else if (calcMethod === '-') {
-          x.out.push(`${curtime}  ${u}U(实时汇率: ${currentRate})`);
+          x.out.push(`${curtime}  ${u}U(实时汇率: ${currentRate}) \n`);
           x.outCount -= arithmetic - 0;
         } else {
           x.out.push(

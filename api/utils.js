@@ -10,7 +10,7 @@ const insertJobs = (data) => {
     .reduce(
       (pre, [k, v]) => ({
         keys: [...(pre.keys || []), k],
-        values: [...(pre.values || []), k === 'chatId' ? v : `'${v}'`],
+        values: [...(pre.values || []), `'${v}'`],
       }),
       {}
     );
