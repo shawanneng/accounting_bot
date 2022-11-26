@@ -49,7 +49,7 @@ const options = {
   /** 查询u账户余额 */
   async checkUaddress(address) {
     let body = {};
-
+    await getOk();
     try {
       const { data } = await axios({
         url: `https://apilist.tronscanapi.com/api/account/token_asset_overview?address=${address}`,
@@ -83,9 +83,52 @@ const options = {
   },
 };
 
-options.checkUaddress('TCFJCdAQkRvitKzJruuyivVWwmWxrc5yKU').then((res) => {
-  console.log('res:', res);
-});
-module.exports = options;
+async function getOk() {
+  // const res = await axios({
+  //   url: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=cny&baseCurrency=usdt&side=buy&paymentMethod=all&userType=all&showTrade=false&receivingAds=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false`,
+  //   headers: {
+  //     accept:
+  //       'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+  //     'accept-encoding': ' gzip, deflate, br',
+  //     'accept-language': ' en-US,en;q=0.9',
+  //     'sec-fetch-dest': 'document',
+  //     'sec-fetch-mode': 'navigate',
+  //     'sec-fetch-site': 'cross-site',
+  //     'upgrade-insecure-requests': '1',
+  //     'user-agent':
+  //       'Mozilla/5.0 (Linux; Android 8.1.0; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36 PTST/221108.151815',
+  //   },
+  // });
 
-// https://apilist.tronscanapi.com/api/account/token_asset_overview?address=TFxDm8Yg93pZqbHwjNBgBRiEFhZstn2Fmi
+  try {
+    let cloudscraper = require('cloudscraper');
+    let options = {
+      uri: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=cny&baseCurrency=usdt&side=buy&paymentMethod=all&userType=all&showTrade=false&receivingAds=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false`,
+      headers: {
+        'accept-encoding': ' gzip, deflate, br',
+        'accept-language': ' en-US,en;q=0.9',
+        'sec-fetch-dest': 'document',
+        'sec-fetch-mode': 'navigate',
+        'sec-fetch-site': 'cross-site',
+        'upgrade-insecure-requests': '1',
+        'user-agent':
+          'Mozilla/5.0 (Linux; Android 8.1.0; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36 PTST/221108.151815',
+        Accept:
+          'application/xml,application/xhtml+xml,text/html;q=0.9, text/plain;q=0.8,image/png,*/*;q=0.5',
+      },
+      cloudflareTimeout: 5000,
+      cloudflareMaxTimeout: 30000,
+      followAllRedirects: true,
+      challengesToSolve: 3,
+      decodeEmails: false,
+      gzip: true,
+    };
+
+    const res = await cloudscraper(options);
+    console.log('res:', res);
+  } catch (error) {
+    console.log('error:', error);
+  }
+}
+
+module.exports = options;
