@@ -101,7 +101,7 @@ module.exports = async (request, response) => {
         text === '查询实时U价格' ||
         at === '查询实时U价格' ||
         text === '1' ||
-        (text.length === 2 && new RegExp(/\w\d/).test(text))
+        (text?.length === 2 && new RegExp(/\w\d/).test(text))
       ) {
         let list = await getOk();
         list = list.map(
@@ -201,7 +201,7 @@ module.exports = async (request, response) => {
 
       //查询u账号余额
       let filter = /^[a-zA-Z0-9_]{0,}$/;
-      if (filter.test(text) && text.length === 34) {
+      if (filter.test(text) && text?.length === 34) {
         const res = await checkUaddress(text);
 
         if (!_.isEmpty(res)) {

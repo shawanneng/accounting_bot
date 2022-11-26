@@ -1,9 +1,10 @@
 CREATE TABLE `accounts` (
 	`chatId` int NOT NULL,
 	`arithmetic` varchar(255),
-	`arithmeticu` varchar(255),
 	`createTime` bigint,
-	`channel` varchar(255)
+	`channel` varchar(255),
+	`currentRate` varchar(255),
+	`calcMethod` varchar(255)
 ) ENGINE InnoDB,
   CHARSET utf8mb4,
   COLLATE utf8mb4_0900_ai_ci;
@@ -24,3 +25,10 @@ CREATE TABLE `users` (
 
   https://api.telegram.org/bot5764274397:AAEdpssiBQc2u0T_cSRIcQqh5lwax7HHGoU/setWebhook?url=https://accounting-bot.vercel.app
 /api/webhook
+
+etactc@rover.info
+
+
+
+truncate table accounts;
+drop  table accounts;

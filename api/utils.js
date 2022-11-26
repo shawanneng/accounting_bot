@@ -3,7 +3,30 @@ const _ = require('lodash');
 const axios = require('axios');
 let cloudscraper = require('cloudscraper');
 const cheerio = require('cheerio');
-const FormData = require('form-data');
+
+const insertJobs = (list) => {
+  const item = list.reduce((x, y) => {
+    let { keys, values } = Object.entries(y)
+      .sort()
+      .reduce(
+        (pre, [k, v]) => ({
+          keys: [...(pre.keys || []), k],
+          values: [...(pre.values || []), v],
+        }),
+        {}
+      );
+    x.keys = keys.join(',');
+    values = `(${values.map((x) => `'${x}'`).join(',')})`;
+    if (x.values) {
+      x.values.push(values);
+    } else {
+      x.values = [values];
+    }
+
+    return x;
+  }, {});
+  return `INSERT INTO users (${item.keys}) VALUES ${item.values.join(',')};`;
+};
 const options = {
   /** 创建一个用户数据 */
   async createUid(data) {
@@ -15,8 +38,8 @@ const options = {
         code: 201,
       };
     }
-    let createSql = `insert into users set ? ;`;
-    await handleSql(createSql, data);
+    let createSql = insertJobs(data);
+    await handleSql(createSql);
     return { code: 200 };
   },
   /** 查询chatId有关的账单和汇率 */

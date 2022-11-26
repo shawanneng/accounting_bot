@@ -1,5 +1,5 @@
 const DATABASE_URL =
-  'mysql://tmwqi6nkqzow0snhjm2c:pscale_pw_IDPmLMVh52nyTgAAXREyXqWgjhe9XjAhzZaG47w0jjr@us-east.connect.psdb.cloud/accountingbot?ssl={"rejectUnauthorized":true}';
+  'mysql://mymhs9fkqwqq7tioahmo:pscale_pw_OWU1NoTh2mNLEUbRd5g3OMErHxA0j4SbZPciTHVXSWW@us-east.connect.psdb.cloud/tgbotaccounting?ssl={"rejectUnauthorized":true}';
 
 const mysql = require('mysql2');
 const pool = mysql.createPool(DATABASE_URL);
