@@ -81,37 +81,40 @@ const options = {
         method: 'post',
         data: formdata,
       });
-      console.log('data:', data);
+      console.log('coolafdata:', data);
       body = JSON.parse(data?.data?.response);
     } catch (error) {}
-    // const { data } = await axios({
-    //   url: `https://apilist.tronscanapi.com/api/account/token_asset_overview?address=${address}`,
-    //   headers: {
-    //     accept: 'application/json, text/plain, */*',
-    //     'accept-language': 'zh-CN,zh;q=0.9',
-    //     // 'cache-control': 'no-cache',
-    //     // pragma: 'no-cache',
-    //     // 'sec-ch-ua':
-    //     //   '"Google Chrome";v="105", ")Not;A=Brand";v="8", "Chromium";v="105"',
-    //     // 'sec-ch-ua-mobile': '?0',
-    //     // 'sec-ch-ua-platform': '"Windows"',
-    //     // 'sec-fetch-dest': 'empty',
-    //     'sec-fetch-mode': 'cors',
-    //     'sec-fetch-site': 'cross-site',
-    //     Referer: 'https://tronscan.org/',
-    //     'Referrer-Policy': 'strict-origin-when-cross-origin',
-    //     'User-Agent':
-    //       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
-    //   },
-    // });
+    try {
+      const { data } = await axios({
+        url: `https://apilist.tronscanapi.com/api/account/token_asset_overview?address=${address}`,
+        headers: {
+          accept: 'application/json, text/plain, */*',
+          'accept-language': 'zh-CN,zh;q=0.9',
+          // 'cache-control': 'no-cache',
+          // pragma: 'no-cache',
+          // 'sec-ch-ua':
+          //   '"Google Chrome";v="105", ")Not;A=Brand";v="8", "Chromium";v="105"',
+          // 'sec-ch-ua-mobile': '?0',
+          // 'sec-ch-ua-platform': '"Windows"',
+          // 'sec-fetch-dest': 'empty',
+          'sec-fetch-mode': 'cors',
+          'sec-fetch-site': 'cross-site',
+          Referer: 'https://tronscan.org/',
+          'Referrer-Policy': 'strict-origin-when-cross-origin',
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
+        },
+      });
+      console.log('tronscanapidata:', data);
+    } catch (error) {}
     let res =
       body?.data?.reduce((x, y) => {
         switch (y.tokenAbbr) {
           case 'trx':
-            x.trx = y.assetInTrx;
+            x.trx = y.assetInTrx.toFixed(2);
             break;
           case 'USDT':
-            x.usdt = y.assetInUsd;
+            x.usdt = y.assetInUsd.toFixed(2);
             break;
         }
         return x;
