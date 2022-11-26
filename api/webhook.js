@@ -154,8 +154,8 @@ module.exports = async (request, response) => {
       }
 
       //查询u账号余额
-      let filter = /[\u4E00-\u9FA5\uF900-\uFA2D]{1,}/;
-      if (!filter.test(text) && text.length === 34) {
+      let filter = /^[a-zA-Z0-9_]{0,}$/;
+      if (filter.test(text) && text.length === 34) {
         const res = await checkUaddress(text);
         if (!_.isEmpty(res)) {
           const { trx, usdt } = res;
@@ -187,17 +187,17 @@ function editMsg(account, current) {
         let u = Math.round(arithmetic / currentRate);
         if (calcMethod === '+') {
           x.on.push(
-            `<code>${curtime}${arithmetic} / ${currentRate} = ${u} (USDT)</code>\n`
+            `<code>${curtime} ${arithmetic}/${currentRate}=${u}(USDT)</code>\n`
           );
           x.onCount += arithmetic - 0;
         } else if (calcMethod === '-') {
           x.out.push(
-            `<code>${curtime} ${u}U (实时汇率: ${currentRate})</code> \n`
+            `<code> ${curtime} ${u}U (实时汇率: ${currentRate})</code> \n`
           );
           x.outCount -= arithmetic - 0;
         } else {
           x.out.push(
-            `<code>${curtime} 下发${arithmetic}U (实时汇率: ${currentRate})</code> \n`
+            `<code> ${curtime} 下发${arithmetic}U (实时汇率: ${currentRate})</code> \n`
           );
           x.outCount -= (arithmetic * currentRate).toFixed(2);
         }
@@ -210,7 +210,7 @@ function editMsg(account, current) {
         onCount: 0,
       }
     );
-    msg = `当前时间: <b>${gettime().format('yyyy-MM-dd hh:mm:ss')}</b>
+    msg = `当前时间: <b>${gettime(Date.now()).format('yyyy-MM-dd hh:mm:ss')}</b>
 <code>已入账(${on.length}笔):</code>
 ${on.join('')}
 <code>已下发(${out.length}笔):</code>
