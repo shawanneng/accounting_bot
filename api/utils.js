@@ -133,7 +133,7 @@ const options = {
 async function getOk() {
   try {
     let options = {
-      uri: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=cny&baseCurrency=usdt&side=buy&paymentMethod=all&userType=all&showTrade=true&receivingAds=true&showFollow=false&showAlreadyTraded=false&isAbleFilter=true&quoteMinAmountPerOrder=1000&urlId=37`,
+      uri: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=CNY&baseCurrency=USDT&side=sell&paymentMethod=all&userType=all&showTrade=false&receivingAds=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false&urlId=3`,
       headers: {
         accept:
           'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
@@ -159,7 +159,7 @@ async function getOk() {
     let data = {};
     eval(`data = ${html}`);
     const curOptions =
-      data?.data?.buy?.map(({ nickName, price }) => ({
+      data?.data?.sell?.map(({ nickName, price }) => ({
         nickName,
         price,
       })) || [];
