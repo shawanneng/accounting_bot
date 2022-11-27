@@ -89,7 +89,7 @@ module.exports = async (request, response) => {
 <b>5,发送指令-RMB如</b><u>-100</u><b>使用记账减100</b> 
 <b>6,发送指令下发U如</b><u>下发100</u><b>使用记账减100u</b> 
 <b>7,发送指令</b><u>清空账本</u><b>可清空记账本重新开始</b> 
-<b>8,发送指令</b><u>查+冷钱包U地址</u><b>可查询实时余额</b>`;
+<b>8,发送指令</b><u>查+U地址</u><b>可查询实时余额</b>`;
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
           ...options,
