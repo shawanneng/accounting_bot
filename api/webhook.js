@@ -136,13 +136,13 @@ module.exports = async (request, response) => {
         }
 
         if (type !== 'supergroup') {
-          outMsg = `请将 @well_account_bot 机器人拉入群组设置管理员后再进行使用`;
+          outMsg = `请将 @accountIng_all_in_bot 机器人拉入群组设置管理员后再进行使用`;
         }
 
         await bot.sendMessage(id, outMsg, options);
       }
 
-      if (text) {
+      if (text && type === 'supergroup') {
         let reg = new RegExp(/(\+|\-|下发)/g);
         const arithmetic = text.replace(reg, '').trim();
         if (Number.isFinite(+arithmetic) && reg.test(text)) {
