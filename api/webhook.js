@@ -90,7 +90,7 @@ module.exports = async (request, response) => {
 发送指令设置费率+费率如<b><u>设置费率7.25</u></b>设置当前记账费率
 发送指令-RMB如<b><u>-100</u></b> 使用记账减100
 发送指令下发U如<b><u>下发100</u></b> 使用记账减100u
-<b>直接发送冷钱包U地址 可查询实时余额</b>`;
+<b style="color: red">直接发送冷钱包U地址 可查询实时余额</b>`;
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
           ...options,
