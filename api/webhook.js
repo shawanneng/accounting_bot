@@ -226,14 +226,13 @@ module.exports = async (request, response) => {
         let [rateItem] = await getOk();
         if (price.includes('CNY')) {
           let calcAmount = (curAmount / rateItem.price).toFixed(2);
-          outMsg = `<b>当前UDST汇率<pre>${rateItem.price}</pre></b>\n<b>${curAmount}人民币汇算成U价格: <pre>${calcAmount}U</pre></b>\n`;
+          outMsg = `<b>当前UDST汇率<pre>${rateItem.price}</pre></b>\n<b>${curAmount}人民币汇算成U: <pre>${calcAmount}U</pre></b>\n`;
         } else {
           let calcAmount = (curAmount * rateItem.price).toFixed(2);
-          outMsg = `<b>当前UDST汇率<pre>${rateItem.price}</pre></b>\n<b>${curAmount}UDST折合人民币价格: <pre>${calcAmount}元</pre></b>\n`;
+          outMsg = `<b>当前UDST汇率<pre>${rateItem.price}</pre></b>\n<b>${curAmount}UDST折合人民币: <pre>${calcAmount}元</pre></b>\n`;
         }
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
-          ...options,
         });
       }
     }
