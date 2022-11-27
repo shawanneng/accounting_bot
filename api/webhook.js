@@ -231,7 +231,10 @@ module.exports = async (request, response) => {
           let calcAmount = (curAmount * rateItem.price).toFixed(2);
           outMsg = `<b>当前UDST汇率<pre>${rateItem.price}</pre></b>\n<b>${curAmount}UDST折合人民币价格: <pre>${calcAmount}</pre></b>\n`;
         }
-        await bot.sendMessage(id, outMsg, options);
+        await bot.sendMessage(id, outMsg, {
+          parse_mode: 'HTML',
+          ...options,
+        });
       }
     }
   } catch (error) {
