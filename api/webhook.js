@@ -89,7 +89,7 @@ module.exports = async (request, response) => {
 <b>5.发送指令-RMB如</b><u>-100</u><b>使用记账减100</b> 
 <b>6.发送指令下发U如</b><u>下发100</u><b>使用记账减100u</b> 
 <b>7.发送指令</b><u>清空账本</u><b>可清空记账本重新开始</b> 
-<b>8.发送指令查U加地址 可查询实时余额</b>`;
+<b>8.发送指令查加U地址 可查询实时余额</b>`;
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
           ...options,
@@ -199,7 +199,7 @@ module.exports = async (request, response) => {
       }
 
       //查询u账号余额
-      const checkUreg = new RegExp(/^查U/);
+      const checkUreg = new RegExp(/^查/);
       const filter = /[a-zA-Z0-9_]{0,}/;
       const address = text.replace(checkUreg, '').trim();
       if (
