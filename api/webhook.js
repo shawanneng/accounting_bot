@@ -215,6 +215,22 @@ module.exports = async (request, response) => {
           });
         }
       }
+
+      //根据U换算人民币
+      let rateReg = new RegExp(/^(U|CNY)/);
+      let price = text.toLocaleUpperCase();
+      let curAmount = price.replace(reg, '').trim();
+      if (rateReg.test(price) && Number.isFinite(+curAmount)) {
+        let [rateItem] = await getOk();
+        if (price.includes('U')) {
+          let calcAmount = (curAmount / rateItem.price).toFixed(2);
+          outMsg = `<b>当前UDST汇率<pre>${rateItem.price}</pre></b>\n<b>${curAmount}人民币汇算成U价格: <pre>${calcAmount}</pre></b>\n`;
+        } else {
+          let calcAmount = (curAmount * rateItem.price).toFixed(2);
+          outMsg = `<b>当前UDST汇率<pre>${rateItem.price}</pre></b>\n<b>${curAmount}UDST折合人民币价格: <pre>${calcAmount}</pre></b>\n`;
+        }
+        await bot.sendMessage(id, outMsg, options);
+      }
     }
   } catch (error) {
     console.error(error);
