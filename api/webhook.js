@@ -82,17 +82,14 @@ module.exports = async (request, response) => {
       let at = text?.slice(item?.length || 0)?.trim();
 
       if (text === '使用说明' || at === '使用说明') {
-        outMsg = `<ul>
-<li>发送指令<b><u>查询实时U价格</u></b> 可查实时USDT价格</li>
-<li>发送指令如<b><u>U100</u></b> 可查100UDST折合人民币价格</li>
-<li>发送指令如<b><u>CNY100</u></b> 可查100人民币汇算UDST价格</li>
-<li>发送指令<b><u>清空账本</u></b> 可清空记账本重新开始</li>
-<li>发送指令+RMB如<b><u>+100</u></b> 使用记账加100</li>
-<li>发送指令设置费率+费率如<b><u>设置费率7.25</u></b>设置当前记账费率</li>
-<li>发送指令-RMB如<b><u>-100</u></b> 使用记账减100</li>
-<li>发送指令下发U如<b><u>下发100</u></b> 使用记账减100u</li>
-<li><u>直接发送冷钱包U地址 可查询实时余额</u></li>
-</ul>`;
+        outMsg = `<b>发送指令如</b><u>U100</u> <b>可查100UDST折合人民币价格</b>
+<b>发送指令如</b><u>CNY100</u> <b>可查100人民币汇算UDST价格</b>
+<b>发送指令+RMB如</b><u>+100</u> <b>使用记账加100</b>
+<b>发送指令设置费率+费率如</b><u>设置费率7.25</u><b>设置当前记账费率</b> 
+<b>发送指令-RMB如</b><u>-100</u><b> 使用记账减100</b> 
+<b>发送指令下发U如</b><u>下发100</u><b> 使用记账减100u</b> 
+<b>发送指令</b> <u>清空账本</u>可清空记账本重新开始</b> 
+<b>直接发送冷钱包U地址 可查询实时余额</b>`;
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
           ...options,
