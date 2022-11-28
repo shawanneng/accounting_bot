@@ -12,6 +12,7 @@ const {
   setRate,
   checkUaddress,
   getOk,
+  checkUDetail,
 } = require('./utils');
 
 //获取当前时间
@@ -220,6 +221,22 @@ module.exports = async (request, response) => {
             ...options,
           });
         }
+      }
+
+      const detailReg = new RegExp(/^查U明细/);
+      let selectDetailAddress = text.replace(detailReg, '').trim();
+
+      if (text && filter.test(selectDetailAddress) && detailReg.test(text)) {
+        const list = await checkUDetail(selectDetailAddress);
+
+        outMsg = `查询今日近时交易明细: <code>${selectDetailAddress}</code>\n${
+          list?.length ? list.map(({ text }) => text) : '今日暂无'
+        }`;
+
+        await bot.sendMessage(id, outMsg, {
+          parse_mode: 'HTML',
+          ...options,
+        });
       }
 
       //根据U换算人民币

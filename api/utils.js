@@ -3,7 +3,7 @@ const _ = require('lodash');
 const axios = require('axios');
 let cloudscraper = require('cloudscraper');
 const cheerio = require('cheerio');
-
+const dayjs = require('dayjs');
 const insertJobs = (data) => {
   let { keys, values } = Object.entries(data)
     .sort()
@@ -65,38 +65,6 @@ const options = {
     await handleSql(setSql, { rate });
   },
   /** 查询u账户余额 */
-  // async checkUaddress(address) {
-  //   let body = {};
-  //   try {
-  //     const { data } = await axios({
-  //       url: `https://apilist.tronscanapi.com/api/account/token_asset_overview?address=${address}`,
-  //       headers: {
-  //         accept: 'application/json, text/plain, */*',
-  //         'accept-language': 'zh-CN,zh;q=0.9',
-  //         'sec-fetch-mode': 'cors',
-  //         'sec-fetch-site': 'cross-site',
-  //         Referer: 'https://tronscan.org/',
-  //         'Referrer-Policy': 'strict-origin-when-cross-origin',
-  //         'User-Agent':
-  //           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
-  //       },
-  //     });
-  //     body = data;
-  //   } catch (error) {}
-  //   let res =
-  //     body?.data?.reduce((x, y) => {
-  //       switch (y.tokenAbbr) {
-  //         case 'trx':
-  //           x.trx = y.assetInTrx.toFixed(2);
-  //           break;
-  //         case 'USDT':
-  //           x.usdt = y.assetInUsd.toFixed(2);
-  //           break;
-  //       }
-  //       return x;
-  //     }, {}) || {};
-  //   return res;
-  // },
   async checkUaddress(address) {
     try {
       const { data } = await axios({
@@ -126,6 +94,8 @@ const options = {
       console.log('error:', error);
     }
   },
+  /** 查询u明细 */
+  checkUDetail,
   /** 获取当前汇率 */
   getOk,
 };
@@ -178,7 +148,7 @@ async function getOk() {
       }
     }
 
-    randomList = randomList.sort((a, b) => b.price - a.price);
+    randomList = randomList.sort((a, b) => a.price - b.price);
 
     return randomList;
   } catch (error) {
@@ -187,6 +157,71 @@ async function getOk() {
   }
 }
 
-options.checkUaddress('TNANMFXnTZ5UBsHx4Hk7ViTgXu8KgwPfdh');
+async function checkUDetail(address) {
+  try {
+    const { data } = await axios({
+      url: `http://zhourunfa888.com/index/index/address/search/${address}/page/1/which/trc20.html`,
+      headers: {
+        Accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        'proxy-connection': 'keep-alive',
+        'x-requested-with': 'XMLHttpRequest',
+        'Referrer-Policy': 'strict-origin-when-cross-origin',
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
+        cookie: `Hm_lvt_dd219329afac342521844220206d70a7==${Date.now()}; Hm_lpvt_dd219329afac342521844220206d70a7=${Date.now()}`,
+        Referer: 'http://zhourunfa888.com/',
+      },
+    });
+    const $ = cheerio.load(data);
+    let kaijiangData = [];
+    let tr = $('.table-responsive  .mt-2  tr');
+
+    tr?.map((x, e) => {
+      if (x > 0) {
+        let obj = {};
+        $(e)
+          ?.find('.text-break')
+          ?.each((index, e) => {
+            let text = $(e).text().trim();
+            text = text === address ? '它' : text;
+            if (index === 0) {
+              obj.time = text;
+              obj.isToday = dayjs(obj.time).isSame(dayjs(new Date()), 'day');
+            }
+            if (index === 1) {
+              obj.out = text;
+            }
+            if (index === 2) {
+              obj.on = text;
+            }
+            if (index === 4) {
+              let price = $(e).find('.badge').text().replace(/\s+/g, '');
+              obj.price = price;
+            }
+          });
+        if (obj.isToday) {
+          if (obj.on === '它') {
+            obj.text = `<b>${obj.time}</b> <code>${obj.out}</code>向<b>它</b>转账 <b>${obj.price}U</b>\n`;
+          }
+
+          if (obj.out === '它') {
+            obj.text = `<b>${obj.time}</b> <b>它</b>向<code>${obj.out}</code>转账 <b>${obj.price}U</b>\n`;
+          }
+
+          kaijiangData.push(obj);
+        }
+      }
+    });
+    console.log('kaijiangData:', kaijiangData);
+    if (!_.isEmpty(kaijiangData)) {
+      return kaijiangData;
+    }
+  } catch (error) {
+    console.log('error:', error);
+  }
+}
+
+checkUDetail('TNANMFXnTZ5UBsHx4Hk7ViTgXu8KgwPfdh');
 
 module.exports = options;
