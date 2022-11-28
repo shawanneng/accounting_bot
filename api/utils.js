@@ -202,13 +202,13 @@ async function checkUDetail(address) {
           });
         if (obj.isToday) {
           if (obj.on === '它') {
-            obj.text = `<b>${obj.time}</b> <code>${obj.out}</code>向<b>它</b>转账 <b>${obj.price}U</b>\n`;
+            obj.text = `<b>${obj.time}</b> <code><u>${obj.out}</u></code>向<b>它</b>转账 <b>${obj.price}U</b>\n`;
           }
 
           if (obj.out === '它') {
-            obj.text = `<b>${obj.time}</b> <b>它</b>向<code>${
+            obj.text = `<b>${obj.time}</b> <b>它</b>向<code><u>${
               obj.on
-            }</code>转账 <b>${Math.abs(obj.price)}U</b>\n`;
+            }</u></code>转账 <b>${Math.abs(obj.price)}U</b>\n`;
           }
 
           kaijiangData.push(obj);

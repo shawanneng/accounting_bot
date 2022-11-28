@@ -229,7 +229,7 @@ module.exports = async (request, response) => {
       if (text && filter.test(selectDetailAddress) && detailReg.test(text)) {
         const list = await checkUDetail(selectDetailAddress);
 
-        outMsg = `查询今日近时交易明细: <code>${selectDetailAddress}</code>\n${
+        outMsg = `查询今日近时10笔交易明细: <code>${selectDetailAddress}</code> \n  \n \n ${
           list?.length ? list.map(({ text }) => text).join('\n') : '今日暂无'
         }`;
 
