@@ -206,7 +206,9 @@ async function checkUDetail(address) {
           }
 
           if (obj.out === '它') {
-            obj.text = `<b>${obj.time}</b> <b>它</b>向<code>${obj.out}</code>转账 <b>${obj.price}U</b>\n`;
+            obj.text = `<b>${obj.time}</b> <b>它</b>向<code>${
+              obj.on
+            }</code>转账 <b>${Math.abs(obj.price)}U</b>\n`;
           }
 
           kaijiangData.push(obj);

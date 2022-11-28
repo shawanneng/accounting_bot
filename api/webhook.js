@@ -230,7 +230,7 @@ module.exports = async (request, response) => {
         const list = await checkUDetail(selectDetailAddress);
 
         outMsg = `查询今日近时交易明细: <code>${selectDetailAddress}</code>\n${
-          list?.length ? list.map(({ text }) => text) : '今日暂无'
+          list?.length ? list.map(({ text }) => text).join('\n') : '今日暂无'
         }`;
 
         await bot.sendMessage(id, outMsg, {
