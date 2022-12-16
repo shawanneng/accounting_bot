@@ -82,23 +82,23 @@ module.exports = async (request, response) => {
 
       const [item = {}] = entities || [];
       let at = text?.slice(item?.length || 0)?.trim();
-      if (+chatId === 2047331334) {
-        let result = await bot.sendMessage(
-          id,
-          `<b>您当前所在群组Id:${id}</b><b>您当前所在群组名称:${title}（${type}）</b>`,
-          {
-            parse_mode: 'HTML',
-            reply_to_message_id: message_id,
-            ...options,
-          }
-        );
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(true);
-          }, 5000);
-        });
-        await bot.deleteMessage(result?.chat?.id, result?.message_id);
-      }
+      // if (+chatId === 2047331334) {
+      //   let result = await bot.sendMessage(
+      //     id,
+      //     `<b>您当前所在群组Id:${id}</b><b>您当前所在群组名称:${title}（${type}）</b>`,
+      //     {
+      //       parse_mode: 'HTML',
+      //       reply_to_message_id: message_id,
+      //       ...options,
+      //     }
+      //   );
+      //   await new Promise((resolve) => {
+      //     setTimeout(() => {
+      //       resolve(true);
+      //     }, 5000);
+      //   });
+      //   await bot.deleteMessage(result?.chat?.id, result?.message_id);
+      // }
 
       if (text === '使用说明' || at === '使用说明') {
         outMsg = `<b>1,发送指令如</b><u>U100</u><b>可查实时汇率100UDST折合人民币价格</b>
