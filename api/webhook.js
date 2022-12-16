@@ -95,7 +95,7 @@ module.exports = async (request, response) => {
         await new Promise((resolve) => {
           setTimeout(() => {
             resolve(true);
-          }, 2500);
+          }, 5000);
         });
         await bot.deleteMessage(result?.chat?.id, result?.message_id);
       }
