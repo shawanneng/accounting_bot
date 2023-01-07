@@ -119,34 +119,40 @@ module.exports = async (request, response) => {
       if (
         text === '查询实时U价格' ||
         at === '查询实时U价格' ||
-        (text?.length === 2 && new RegExp(/\w\d/).test(text))
+        new RegExp(/^\w{1,2}\d{1,5}$/).test(text)
       ) {
+        const head = new RegExp(/\w{1,2}/).exec(text)?.[0];
+        const end = new RegExp(/\d{1,5}/).exec(text)?.[0] || 1000;
         let selectPaymentMethod = 'bank';
         let methodName = '银行卡';
         switch (true) {
-          case text.includes('y'):
+          case head?.includes('y'):
             selectPaymentMethod = 'bank';
             methodName = '银行卡';
             break;
-          case text.includes('z'):
+          case head?.includes('z'):
             selectPaymentMethod = 'aliPay';
             methodName = '支付宝';
             break;
-          case text.includes('w'):
+          case head?.includes('w'):
             selectPaymentMethod = 'wxPay';
             methodName = '微信';
+            break;
+          case head?.includes('bx'):
+            selectPaymentMethod = 'all';
+            methodName = '全部';
             break;
 
           default:
             break;
         }
-        let list = await getOk(selectPaymentMethod);
+        let list = await getOk(selectPaymentMethod, end);
         list = list.map(
           (x) =>
             `<strong>${x.price}</strong>   <strong>${x.nickName}</strong>\n`
         );
 
-        outMsg = `<em>当前查询${methodName}交易</em>\n<em>当前实时USDT价格</em>\n${list.join(
+        outMsg = `<em>当前查询${methodName}交易 限额:${end}以上</em>\n<em>当前实时USDT价格</em>\n${list.join(
           ''
         )}\n`;
         await bot.sendMessage(id, outMsg, {
