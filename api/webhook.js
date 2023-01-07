@@ -57,10 +57,10 @@ const options = {
           switch_inline_query_current_chat: '查询实时U价格',
         },
       ],
-      // [
-      //   { text: '联系客服', url: 'https://t.me/tianxiawudi777' },
-      //   { text: '担保大群', url: 'https://t.me/tianxiawudi777' },
-      // ],
+      [
+        { text: '联系客服', url: 'https://t.me/tianxiawudi777' },
+        { text: '担保大群', url: 'https://t.me/tianxiawudi777' },
+      ],
     ],
   },
 };
