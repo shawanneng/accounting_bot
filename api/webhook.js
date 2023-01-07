@@ -174,7 +174,7 @@ module.exports = async (request, response) => {
 
         const calcNum = (end / list?.[0]?.price).toFixed(2) || 0;
 
-        outMsg = `<b>当前筛选:欧易OTC商家</b>\n<em>限额${end}以上${methodName}交易</em>\n<em>查询到当前实时USDT价格</em>\n${outList.join(
+        outMsg = `<b>当前筛选:欧易OTC商家</b>\n<em>限额${end}以上${methodName}交易</em>\n\n<em>查询到当前实时USDT价格</em>\n${outList.join(
           ''
         )}\n<em>${end} ÷ ${list?.[0]?.price} = ${calcNum}USDT</em>\n`;
         await bot.sendMessage(id, outMsg, {
