@@ -146,7 +146,7 @@ module.exports = async (request, response) => {
             `<strong>${x.price}</strong>   <strong>${x.nickName}</strong>\n`
         );
 
-        outMsg = `<em>${methodName}交易当前实时USDT价格</em>\n${list.join(
+        outMsg = `<em>当前查询${methodName}交易</em>\n<em>当前实时USDT价格</em>\n${list.join(
           ''
         )}\n`;
         await bot.sendMessage(id, outMsg, {
