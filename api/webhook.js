@@ -122,7 +122,8 @@ module.exports = async (request, response) => {
         new RegExp(/^\w{1,2}\d{1,5}$/).test(text)
       ) {
         const head = new RegExp(/\w{1,2}/).exec(text)?.[0];
-        const end = new RegExp(/\d{1,5}/).exec(text)?.[0] || 1000;
+        let end = new RegExp(/\d{1,5}/).exec(text)?.[0];
+        end = end > 10 ? end : 100;
         let selectPaymentMethod = 'bank';
         let methodName = '银行卡';
         switch (true) {
