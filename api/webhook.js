@@ -148,14 +148,18 @@ module.exports = async (request, response) => {
             break;
         }
         let list = await getOk(selectPaymentMethod, end);
-        list = list.map(
+        const outList = list.map(
           (x) =>
             `<strong>${x.price}</strong>   <strong>${x.nickName}</strong>\n`
         );
 
-        outMsg = `<em>当前查询${methodName}交易 限额:${end}以上</em>\n<em>当前实时USDT价格</em>\n${list.join(
+        const calcNum = (end / list?.[0]?.price).toFixed(2) || 0;
+
+        outMsg = `<em>当前实时USDT价格</em>\n${outList.join(
           ''
-        )}\n`;
+        )}\n<em>当前查询限额${end}以上${methodName}交易 </em>\n<em>${end} ÷ ${
+          list?.[0]?.price
+        } = ${calcNum}USDT</em>\n`;
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
           ...options,
