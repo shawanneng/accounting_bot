@@ -100,7 +100,7 @@ const options = {
   getOk,
 };
 
-async function getOk(method, money) {
+async function getOk(method = 'all', money = '100') {
   try {
     let options = {
       uri: `https://www.okx.com/v3/c2c/tradingOrders/books?t=${Date.now()}&quoteCurrency=CNY&baseCurrency=USDT&side=sell&paymentMethod=${method}&userType=all&showTrade=false&receivingAds=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false&quoteMinAmountPerOrder=${money}&urlId=1`,
