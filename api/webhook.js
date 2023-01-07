@@ -121,13 +121,34 @@ module.exports = async (request, response) => {
         at === '查询实时U价格' ||
         (text?.length === 2 && new RegExp(/\w\d/).test(text))
       ) {
-        let list = await getOk();
+        let selectPaymentMethod = 'bank';
+        let methodName = '银行卡';
+        switch (true) {
+          case text.includes('y'):
+            selectPaymentMethod = 'bank';
+            methodName = '银行卡';
+            break;
+          case text.includes('z'):
+            selectPaymentMethod = 'aliPay';
+            methodName = '支付宝';
+            break;
+          case text.includes('w'):
+            selectPaymentMethod = 'wxPay';
+            methodName = '微信';
+            break;
+
+          default:
+            break;
+        }
+        let list = await getOk(selectPaymentMethod);
         list = list.map(
           (x) =>
             `<strong>${x.price}</strong>   <strong>${x.nickName}</strong>\n`
         );
 
-        outMsg = `<em>当前实时USDT价格</em>\n${list.join('')}\n`;
+        outMsg = `<em>${methodName}交易当前实时USDT价格</em>\n${list.join(
+          ''
+        )}\n`;
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
           ...options,
