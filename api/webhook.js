@@ -100,6 +100,25 @@ module.exports = async (request, response) => {
       //   await bot.deleteMessage(result?.chat?.id, result?.message_id);
       // }
 
+      //根据U换算人民币
+      let rateReg = new RegExp(/^(U|CNY)/);
+      let price = text.toLocaleUpperCase();
+      let curAmount = price.replace(rateReg, '').trim();
+      if (rateReg.test(price) && Number.isFinite(+curAmount)) {
+        let [rateItem] = await getOk();
+        if (price.includes('CNY')) {
+          let calcAmount = (curAmount / rateItem.price).toFixed(2);
+          outMsg = `<b>当前UDST汇率<pre>${rateItem.price}</pre></b>\n<b>${curAmount}人民币汇算成U: <pre>${calcAmount}U</pre></b>\n`;
+        } else {
+          let calcAmount = (curAmount * rateItem.price).toFixed(2);
+          outMsg = `<b>当前UDST汇率<pre>${rateItem.price}</pre></b>\n<b>${curAmount}UDST折合人民币: <pre>${calcAmount}元</pre></b>\n`;
+        }
+        await bot.sendMessage(id, outMsg, {
+          parse_mode: 'HTML',
+        });
+        return;
+      }
+
       if (text === '使用说明' || at === '使用说明') {
         outMsg = `<b>1,发送指令如</b><u>U100</u><b>可查实时汇率100UDST折合人民币价格</b>
 <b>2,发送指令如</b><u>CNY100</u><b>可查100人民币实时汇率折合UDST价格</b>
@@ -286,24 +305,6 @@ module.exports = async (request, response) => {
         await bot.sendMessage(id, outMsg, {
           parse_mode: 'HTML',
           ...options,
-        });
-      }
-
-      //根据U换算人民币
-      let rateReg = new RegExp(/^(U|CNY)/);
-      let price = text.toLocaleUpperCase();
-      let curAmount = price.replace(rateReg, '').trim();
-      if (rateReg.test(price) && Number.isFinite(+curAmount)) {
-        let [rateItem] = await getOk();
-        if (price.includes('CNY')) {
-          let calcAmount = (curAmount / rateItem.price).toFixed(2);
-          outMsg = `<b>当前UDST汇率<pre>${rateItem.price}</pre></b>\n<b>${curAmount}人民币汇算成U: <pre>${calcAmount}U</pre></b>\n`;
-        } else {
-          let calcAmount = (curAmount * rateItem.price).toFixed(2);
-          outMsg = `<b>当前UDST汇率<pre>${rateItem.price}</pre></b>\n<b>${curAmount}UDST折合人民币: <pre>${calcAmount}元</pre></b>\n`;
-        }
-        await bot.sendMessage(id, outMsg, {
-          parse_mode: 'HTML',
         });
       }
     }
