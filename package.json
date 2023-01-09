@@ -27,7 +27,7 @@
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
     "mysql2": "^2.3.3",
-    "node-telegram-bot-api": "^0.56.0",
+    "node-telegram-bot-api": "^0.61.0",
     "slug.js": "^3.0.0",
     "uuid": "^8.3.2"
   },
