@@ -187,7 +187,7 @@ module.exports = async (request, response) => {
       if (text === '开始') {
         if (type === 'supergroup') {
           let [rateItem] = await getOk();
-          const { code, channelTitle } = await createUid({
+          const { code, channelTitle, error } = await createUid({
             chatId,
             userName,
             userChannel: id,
@@ -197,6 +197,8 @@ module.exports = async (request, response) => {
           });
           if (code === 200) {
             outMsg = `${first_name} 您好,欢迎使用 算账机器人,你已成功注册!可以点击下方按钮查看机器人使用说明使用 `;
+          } else if (code === 502) {
+            outMsg = ` error:${error}`;
           } else {
             outMsg = ` ${first_name}:您已经在${channelTitle}群内注册过,请直接开始使用吧!`;
           }

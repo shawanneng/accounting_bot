@@ -31,8 +31,14 @@ const options = {
       };
     }
     let createSql = insertJobs(data);
-    await handleSql(createSql);
-    return { code: 200 };
+    try {
+      const result = await handleSql(createSql);
+      console.log('result:', result);
+      return { code: 200 };
+    } catch (error) {
+      console.log('error:', error);
+      return { code: 502, error };
+    }
   },
   /** 查询chatId有关的账单和汇率 */
   async selectMyAccount(chatId) {
