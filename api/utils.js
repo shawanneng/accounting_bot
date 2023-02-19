@@ -32,11 +32,9 @@ const options = {
     }
     let createSql = insertJobs(data);
     try {
-      const result = await handleSql(createSql);
-      console.log('result:', result);
+      await handleSql(createSql);
       return { code: 200 };
     } catch (error) {
-      console.log('error:', error);
       return { code: 502, error };
     }
   },
@@ -230,6 +228,25 @@ async function checkUDetail(address) {
   }
 }
 
-checkUDetail('TNANMFXnTZ5UBsHx4Hk7ViTgXu8KgwPfdh');
-
+// async function run() {
+//   let data = {
+//     chatId: 111,
+//     userName: 222,
+//     userChannel: 333,
+//     userTitle: 444,
+//     channelTitle: 555,
+//     rate: 0.5,
+//   };
+//   let createSql = insertJobs(data);
+//   try {
+//     const d = await handleSql(createSql);
+//     console.log('d:', d);
+//   } catch (error) {
+//     console.log('error:', error);
+//   }
+//   let sql = `select * from  users where 1 = 1`;
+//   const result = await handleSql(sql);
+//   console.log('result:', result);
+// }
+// run();
 module.exports = options;

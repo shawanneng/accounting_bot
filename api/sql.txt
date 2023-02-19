@@ -26,9 +26,8 @@ CREATE TABLE `users` (
   https://api.telegram.org/bot5764274397:AAEdpssiBQc2u0T_cSRIcQqh5lwax7HHGoU/setWebhook?url=https://accounting-bot.vercel.app
 /api/webhook
 
-etactc@rover.info
 
-
+uptmoo@rover.info
 
 truncate table accounts;
 drop  table users;
